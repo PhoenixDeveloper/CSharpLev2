@@ -9,11 +9,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 {
     class Planet:BaseObject
     {
-        Image image;
 
-        public Planet(Point pos, Point dir, Size size, Image image) : base(pos, dir, size)
+        public Planet(Point pos, Point dir, Image image) : base(pos, dir, image)
         {
-            this.image = image;
         }
 
         public override void Draw()

@@ -86,14 +86,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             objs = new BaseObject[46];
             Image imagePlanet = Image.FromFile(@"Pictures\Planet.png");
             Image imageComet = Image.FromFile(@"Pictures\Comet.png");
+            Image imageCircle = Image.FromFile(@"Pictures\Circle.png");
+
             for (int i = 0; i < objs.Length * 45 / 100; i++)
-                objs[i] = new BaseObject(new Point(650, i * 20), new Point(15 - i, 15 - i), new Size(20, 20));
+                objs[i] = new BaseObject(new Point(650, i * 20), new Point(15 - i, 15 - i), imageCircle);
             for (int i = objs.Length * 45 / 100; i < (objs.Length * 90 / 100) ; i++)
                 objs[i] = new Star(new Point(650, i * 20), new Point(15 - i, 15 - i), new Size(35, 35), Pens.Red);
             for (int i = (objs.Length * 90 / 100); i < (objs.Length * 99 / 100) ; i++)
-                objs[i] = new Planet(new Point(600, i*15), new Point(5+2*i*(int)Math.Pow(-1, i), 5 - i * (int)Math.Pow(-1, i)), new Size(20, 20), imageComet);
+                objs[i] = new Comet(new Point(600, i*15), new Point(5+2*i*(int)Math.Pow(-1, i), 5 - i * (int)Math.Pow(-1, i)), imageComet);
             for (int i = (objs.Length * 99 / 100) ; i < objs.Length; i++)
-                objs[i] = new Planet(new Point(300, 300+i*(int)Math.Pow(-1, i)), new Point((int)Math.Pow(-1.05, i), -(int)Math.Pow(-1.05, i)), new Size(100, 100), imagePlanet);
+                objs[i] = new Planet(new Point(300, 300+i*(int)Math.Pow(-1, i)), new Point((int)Math.Pow(-1.05, i), -(int)Math.Pow(-1.05, i)), imagePlanet);
         }
 
         static public void Draw()

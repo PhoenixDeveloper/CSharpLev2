@@ -12,6 +12,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         protected Point pos;
         protected Point dir;
         protected Size size;
+        protected Image image;
 
         public BaseObject(Point pos, Point dir, Size size)
         {
@@ -20,10 +21,27 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             this.size = size;
         }
 
+        public BaseObject(Point pos, Point dir, Image image)
+        {
+            this.pos = pos;
+            this.dir = dir;
+            this.image = image;
+        }
+
         public virtual void Draw()
         {
-            Game.buffer.Graphics.DrawEllipse(Pens.Wheat, pos.X, pos.Y, size.Width, size.Height);
+            if (image == null)
+            {
+                Game.buffer.Graphics.DrawEllipse(Pens.Wheat, pos.X, pos.Y, size.Width, size.Height);
+            }
+            else
+            {
+                Game.buffer.Graphics.DrawImage(image, pos);
+            }
+            
         }
+
+
 
         public void Update()
         {
