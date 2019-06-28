@@ -15,7 +15,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             form.Width = 1366;
             form.Height = 768;
             form.Show();
-            Game.Init(form);
+            SplashScreen.Init(form);
             Application.Run(form);
         }
     }
