@@ -12,8 +12,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static void Main(string[] args)
         {
             Form form = new System.Windows.Forms.Form();
-            form.Width = 1280;
-            form.Height = 1024;
+            form.Width = 1366;
+            form.Height = 768;
             form.Show();
             Game.Init(form);
             Application.Run(form);

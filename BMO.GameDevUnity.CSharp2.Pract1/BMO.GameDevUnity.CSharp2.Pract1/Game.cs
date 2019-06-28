@@ -12,10 +12,46 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
     {
         static BufferedGraphicsContext context;
         static public BufferedGraphics buffer;
+
+        static int width, height;
         // Свойства
         // Ширина и высота игрового поля
-        static public int Width { get; set; }
-        static public int Height { get; set; }
+        static public int Width
+        {
+            get
+            {
+                return width;
+            }
+            set
+            {
+                if (value<0)
+                {
+                    width = -value;
+                }
+                else
+                {
+                    width = value;
+                }
+            }
+        }
+        static public int Height
+        {
+            get
+            {
+                return height;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    height = -value;
+                }
+                else
+                {
+                    height = value;
+                }
+            }
+        }
         static BaseObject[] objs;
 
         static public void Init(Form form)
@@ -47,28 +83,26 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         static public void Load()
         {
-            objs = new BaseObject[30 + 1];
-            for (int i = 0; i < objs.Length / 2; i++)
-                objs[i] = new BaseObject(new Point(600, i * 20), new Point(15 - i, 15 - i), new Size(20, 20));
-            for (int i = objs.Length / 2; i < objs.Length; i++)
-                objs[i] = new Star(new Point(600, i * 20), new Point(15 - i, 15 - i), new Size(20, 20), Pens.Red);
-            Image image = Image.FromFile(@"Pictures\Planet.png");
-            objs[30] = new Planet(new Point(300, 300), new Point(-1, 0), new Size(100, 100), image);
+            objs = new BaseObject[46];
+            Image imagePlanet = Image.FromFile(@"Pictures\Planet.png");
+            Image imageComet = Image.FromFile(@"Pictures\Comet.png");
+            for (int i = 0; i < objs.Length * 45 / 100; i++)
+                objs[i] = new BaseObject(new Point(650, i * 20), new Point(15 - i, 15 - i), new Size(20, 20));
+            for (int i = objs.Length * 45 / 100; i < (objs.Length * 90 / 100) ; i++)
+                objs[i] = new Star(new Point(650, i * 20), new Point(15 - i, 15 - i), new Size(35, 35), Pens.Red);
+            for (int i = (objs.Length * 90 / 100); i < (objs.Length * 99 / 100) ; i++)
+                objs[i] = new Planet(new Point(600, i*15), new Point(5+2*i*(int)Math.Pow(-1, i), 5 - i * (int)Math.Pow(-1, i)), new Size(20, 20), imageComet);
+            for (int i = (objs.Length * 99 / 100) ; i < objs.Length; i++)
+                objs[i] = new Planet(new Point(300, 300+i*(int)Math.Pow(-1, i)), new Point((int)Math.Pow(-1.05, i), -(int)Math.Pow(-1.05, i)), new Size(100, 100), imagePlanet);
         }
 
         static public void Draw()
         {
             //Проверяем вывод графики
             buffer.Graphics.Clear(Color.Black);
-            //buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
-            //buffer.Graphics.FillEllipse(Brushes.Wheat, new Rectangle(100, 100, 200, 200));
-            //buffer.Graphics.DrawString("123", SystemFonts.DefaultFont, Brushes.Aqua, new Point(0, 0));
-            //buffer.Graphics.DrawImage()
 
             foreach (BaseObject obj in objs)
             {
-                /*if (obj is Star) (obj as Star).Draw();
-                if (obj is BaseObject) (obj as BaseObject).Draw();*/
                 obj.Draw();
             }
             buffer.Render();
