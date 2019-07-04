@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMO.GameDevUnity.CSharp2.Pract1", "BMO.GameDevUnity.CSharp2.Pract1\BMO.GameDevUnity.CSharp2.Pract1.csproj", "{2293603B-4AAE-47FB-A2B7-E04A43FED370}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workers", "Workers\Workers.csproj", "{C496A7F3-B372-404F-A307-452DBF475702}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2293603B-4AAE-47FB-A2B7-E04A43FED370}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2293603B-4AAE-47FB-A2B7-E04A43FED370}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2293603B-4AAE-47FB-A2B7-E04A43FED370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C496A7F3-B372-404F-A307-452DBF475702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C496A7F3-B372-404F-A307-452DBF475702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C496A7F3-B372-404F-A307-452DBF475702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C496A7F3-B372-404F-A307-452DBF475702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
