@@ -25,13 +25,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                if (value<0)
+                if (value>=0 && value <= 1000)
                 {
-                    width = -value;
+                    width = value;
                 }
                 else
                 {
-                    width = value;
+                    throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -44,13 +44,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                if (value < 0)
+                if (value >= 0 && value <= 1000)
                 {
-                    height = -value;
+                    height = value;
                 }
                 else
                 {
-                    height = value;
+                    throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -67,6 +67,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             context = BufferedGraphicsManager.Current;
             g = form.CreateGraphics();// Создаём объект - поверхность рисования и связываем его с формой
                                       // Запоминаем размеры формы
+            CheckWindowSize(form);
             Width = form.ClientSize.Width;
             Height = form.ClientSize.Height;
             // Связываем буфер в памяти с графическим объектом.
@@ -129,5 +130,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
                 
             bullet.Update();
         }
+
+        static private void CheckWindowSize(Form form)
+        {
+            if (!(form.Height>=0 && form.Height <= 1000 && form.Width >= 0 && form.Width <= 1000))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
     }
 }
