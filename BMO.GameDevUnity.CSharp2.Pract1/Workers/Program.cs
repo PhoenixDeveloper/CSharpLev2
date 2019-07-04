@@ -23,6 +23,7 @@ namespace Workers
                     workers[i] = new HourlyWorker($"Сми{i}ов{random.Next(i, i * i)}", $"Ви{random.Next(i, i * i)}тор{i}", (random.NextDouble() * 350) + 200);
                 }
             }
+            Array.Sort(workers);
         }
     }
 }

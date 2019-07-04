@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Workers
 {
-    abstract class Worker
+    abstract class Worker:IComparable<Worker>
     {
         public string LastName { get; set; }
         public string FirstName { get; set; }
@@ -31,5 +31,12 @@ namespace Workers
         }
 
         abstract public double WagesPerMonth();
+
+        public int CompareTo(Worker other)
+        {
+            if (WagesPerMonth() > other.WagesPerMonth()) return 1;
+            if (WagesPerMonth() < other.WagesPerMonth()) return -1;
+            return 0;
+        }
     }
 }
