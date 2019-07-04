@@ -49,6 +49,7 @@
     <Compile Include="Bullet.cs" />
     <Compile Include="Comet.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameObjectException.cs" />
     <Compile Include="ICollision.cs" />
     <Compile Include="Planet.cs" />
     <Compile Include="Program.cs" />

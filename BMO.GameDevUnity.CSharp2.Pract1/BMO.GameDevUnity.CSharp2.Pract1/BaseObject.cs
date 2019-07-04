@@ -58,7 +58,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                pos.X = value;
+                if (value > Game.Width*2 || value < -200)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    pos.X = value;
+                }                
             }
         }
 
@@ -70,7 +77,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                pos.Y = value;
+                if (value > Game.Height*2 || value < -200)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    pos.Y = value;
+                }
             }
         }
 
@@ -82,7 +96,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                dir.X = value;
+                if (value > 100)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    dir.X = value;
+                }
             }
         }
 
@@ -94,7 +115,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                dir.Y = value;
+                if (value > 100)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    dir.Y = value;
+                }
             }
         }
 
@@ -108,7 +136,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             {
                 if (value < 0)
                 {
-                    size.Width = -value;
+                    throw new GameObjectException();
                 }
                 else
                 {
@@ -127,7 +155,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             {
                 if (value < 0)
                 {
-                    size.Height = -value;
+                    throw new GameObjectException();
                 }
                 else
                 {
