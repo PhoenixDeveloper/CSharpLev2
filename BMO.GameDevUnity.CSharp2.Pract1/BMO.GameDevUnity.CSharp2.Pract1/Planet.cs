@@ -18,5 +18,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             Game.buffer.Graphics.DrawImage(image, pos);
         }
+
+        public override void Update()
+        {
+            pos.X = pos.X + dir.X;
+            pos.Y = pos.Y + dir.Y;
+            if (pos.X < 0) dir.X = -dir.X;
+            if (pos.X > Game.Width) dir.X = -dir.X;
+            if (pos.Y < 0) dir.Y = -dir.Y;
+            if (pos.Y > Game.Height) dir.Y = -dir.Y;
+        }
     }
 }
