@@ -7,10 +7,9 @@ using System.Drawing;
 
 namespace BMO.GameDevUnity.CSharp2.Pract1
 {
-    class Comet:BaseObject
+    class Bullet : BaseObject
     {
-
-        public Comet(Point pos, Point dir, Size size, Image image)
+        public Bullet(Point pos, Point dir, Size size)
         {
             PosX = pos.X;
             PosY = pos.Y;
@@ -18,22 +17,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             DirY = dir.Y;
             SizeWidth = size.Width;
             SizeHeight = size.Height;
-            Image = image;
         }
 
         public override void Draw()
         {
-            Game.buffer.Graphics.DrawImage(Image, Pos.X, Pos.Y, Size.Width, Size.Height);
+            Game.buffer.Graphics.DrawRectangle(Pens.OrangeRed, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
 
         public override void Update()
         {
-            PosX = Pos.X + Dir.X;
-            PosY = Pos.Y + Dir.Y;
-            if (Pos.X < 0) DirX = -Dir.X;
-            if (Pos.X + Size.Width > Game.Width) DirX = -Dir.X;
-            if (Pos.Y < 0) DirY = -Dir.Y;
-            if (Pos.Y + Size.Height > Game.Height) DirY = -Dir.Y;
+            PosX = Pos.X + 3;
         }
     }
 }
