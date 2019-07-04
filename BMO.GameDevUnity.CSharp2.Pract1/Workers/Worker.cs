@@ -30,12 +30,12 @@ namespace Workers
             }
         }
 
-        abstract public double WagesPerMonth();
+        abstract public double WagesPerMonth { get; }
 
         public int CompareTo(Worker other)
         {
-            if (WagesPerMonth() > other.WagesPerMonth()) return 1;
-            if (WagesPerMonth() < other.WagesPerMonth()) return -1;
+            if (WagesPerMonth > other.WagesPerMonth) return 1;
+            if (WagesPerMonth < other.WagesPerMonth) return -1;
             return 0;
         }
     }

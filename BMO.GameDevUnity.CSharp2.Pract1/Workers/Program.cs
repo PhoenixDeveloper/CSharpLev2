@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +23,12 @@ namespace Workers
                 }
             }
             Array.Sort(workers);
+            ArrayWorkers arrayWorkers = new ArrayWorkers(workers);
+            foreach (var worker in arrayWorkers)
+            {
+                Console.WriteLine($"Сотрудник: {worker.LastName} {worker.FirstName}. Среднемесячная заработная плата: {worker.WagesPerMonth}");
+            }
+            Console.ReadKey();
         }
     }
 }

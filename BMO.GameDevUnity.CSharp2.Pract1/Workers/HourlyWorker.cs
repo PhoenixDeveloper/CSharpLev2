@@ -15,9 +15,12 @@ namespace Workers
             Salary = salary;
         }
 
-        public override double WagesPerMonth()
+        public override double WagesPerMonth
         {
-            return Math.Round((20.8 * 8 * Salary), 2);
+            get
+            {
+                return Math.Round((20.8 * 8 * Salary), 2);
+            }            
         }
     }
 }
