@@ -12,7 +12,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static void Main(string[] args)
         {
             Form form = new System.Windows.Forms.Form();
-            form.Width = 1366;
+            form.Width = 800;
             form.Height = 768;
             form.Show();
             SplashScreen.Init(form);

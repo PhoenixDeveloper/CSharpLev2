@@ -14,6 +14,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static public BufferedGraphics buffer;
 
         static int width, height;
+        static Random random = new Random();
         // Свойства
         // Ширина и высота игрового поля
         static public int Width
@@ -24,16 +25,17 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                if (value<0)
-                {
-                    width = -value;
-                }
-                else
+                if (value>=0 && value <= 1000)
                 {
                     width = value;
                 }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
             }
         }
+
         static public int Height
         {
             get
@@ -42,17 +44,20 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
             set
             {
-                if (value < 0)
-                {
-                    height = -value;
-                }
-                else
+                if (value >= 0 && value <= 1000)
                 {
                     height = value;
                 }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
             }
         }
+
         static BaseObject[] objs;
+
+        static Bullet bullet;
 
         static public void Init(Form form)
         {
@@ -62,8 +67,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             context = BufferedGraphicsManager.Current;
             g = form.CreateGraphics();// Создаём объект - поверхность рисования и связываем его с формой
                                       // Запоминаем размеры формы
-            Width = form.Width;
-            Height = form.Height;
+            CheckWindowSize(form);
+            Width = form.ClientSize.Width;
+            Height = form.ClientSize.Height;
             // Связываем буфер в памяти с графическим объектом.
             // для того, чтобы рисовать в буфере
             buffer = context.Allocate(g, new Rectangle(0, 0, Width, Height));
@@ -88,14 +94,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             Image imageComet = Image.FromFile(@"Pictures\Comet.png");
             Image imageCircle = Image.FromFile(@"Pictures\Circle.png");
 
-            for (int i = 0; i < objs.Length * 45 / 100; i++)
-                objs[i] = new BaseObject(new Point(650, i * 20), new Point(15 - i, 15 - i), imageCircle);
-            for (int i = objs.Length * 45 / 100; i < (objs.Length * 90 / 100) ; i++)
+            for (int i = 0; i < (objs.Length * 90 / 100) ; i++)
                 objs[i] = new Star(new Point(650, i * 20), new Point(15 - i, 15 - i), new Size(35, 35), Pens.Red);
             for (int i = (objs.Length * 90 / 100); i < (objs.Length * 99 / 100) ; i++)
-                objs[i] = new Comet(new Point(600, i*15), new Point(5+2*i*(int)Math.Pow(-1, i), 5 - i * (int)Math.Pow(-1, i)), imageComet);
+                objs[i] = new Comet(new Point(600, i*15), new Point(2*i*(int)Math.Pow(-1, i), i * (int)Math.Pow(-1, i)), new Size(60, 60), imageComet);
             for (int i = (objs.Length * 99 / 100) ; i < objs.Length; i++)
-                objs[i] = new Planet(new Point(300, 300+i*(int)Math.Pow(-1, i)), new Point((int)Math.Pow(-1.05, i), -(int)Math.Pow(-1.05, i)), imagePlanet);
+                objs[i] = new Planet(new Point(300, 300+i*(int)Math.Pow(-1, i)), new Point((int)Math.Pow(-1.05, i), -(int)Math.Pow(-1.05, i)), new Size(160, 160), imagePlanet);
+            bullet = new Bullet(new Point(0, 200), new Point(0, 0), new Size(10, 10));
         }
 
         static public void Draw()
@@ -107,13 +112,32 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             {
                 obj.Draw();
             }
+            bullet.Draw();
             buffer.Render();
         }
 
         static public void Update()
         {
             foreach (BaseObject obj in objs)
+            {
                 obj.Update();
+                if (obj.Collision(bullet))
+                {
+                    obj.PosX = random.Next(Width);
+                    obj.PosY = random.Next(Height);
+                }
+            }
+                
+            bullet.Update();
         }
+
+        static private void CheckWindowSize(Form form)
+        {
+            if (!(form.Height>=0 && form.Height <= 1000 && form.Width >= 0 && form.Width <= 1000))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
     }
 }

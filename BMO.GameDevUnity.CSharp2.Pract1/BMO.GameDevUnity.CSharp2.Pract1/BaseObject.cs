@@ -7,50 +7,172 @@ using System.Drawing;
 
 namespace BMO.GameDevUnity.CSharp2.Pract1
 {
-    class BaseObject
+    abstract class BaseObject:ICollision
     {
-        protected Point pos;
-        protected Point dir;
-        protected Size size;
-        protected Image image;
+        Point pos;
+        Point dir;
+        Size size;
+        Image image;
 
-        public BaseObject(Point pos, Point dir, Size size)
+        protected Point Pos
         {
-            this.pos = pos;
-            this.dir = dir;
-            this.size = size;
-        }
-
-        public BaseObject(Point pos, Point dir, Image image)
-        {
-            this.pos = pos;
-            this.dir = dir;
-            this.image = image;
-        }
-
-        public virtual void Draw()
-        {
-            if (image == null)
+            get
             {
-                Game.buffer.Graphics.DrawEllipse(Pens.Wheat, pos.X, pos.Y, size.Width, size.Height);
+                return pos;
             }
-            else
-            {
-                Game.buffer.Graphics.DrawImage(image, pos);
-            }
-            
         }
 
-
-
-        public void Update()
+        protected Point Dir
         {
-            pos.X = pos.X + dir.X;
-            pos.Y = pos.Y + dir.Y;
-            if (pos.X < 0) dir.X = -dir.X;
-            if (pos.X > Game.Width) dir.X = -dir.X;
-            if (pos.Y < 0) dir.Y = -dir.Y;
-            if (pos.Y > Game.Height) dir.Y = -dir.Y;
+            get
+            {
+                return dir;
+            }
+        }
+
+        protected Size Size
+        {
+            get
+            {
+                return size;
+            }
+        }
+
+        public Image Image
+        {
+            get
+            {
+                return image;
+            }
+            set
+            {
+                image = value;
+            }
+        }
+
+        public int PosX
+        {
+            get
+            {
+                return pos.X;
+            }
+            set
+            {
+                if (value > Game.Width*2 || value < -200)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    pos.X = value;
+                }                
+            }
+        }
+
+        public int PosY
+        {
+            get
+            {
+                return pos.Y;
+            }
+            set
+            {
+                if (value > Game.Height*2 || value < -200)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    pos.Y = value;
+                }
+            }
+        }
+
+        public int DirX
+        {
+            get
+            {
+                return dir.X;
+            }
+            set
+            {
+                if (value > 100)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    dir.X = value;
+                }
+            }
+        }
+
+        public int DirY
+        {
+            get
+            {
+                return dir.Y;
+            }
+            set
+            {
+                if (value > 100)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    dir.Y = value;
+                }
+            }
+        }
+
+        public int SizeWidth
+        {
+            get
+            {
+                return size.Width;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    size.Width = value;
+                }                
+            }
+        }
+
+        public int SizeHeight
+        {
+            get
+            {
+                return size.Height;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    size.Height = value;
+                }
+            }
+        }
+
+        public Rectangle Rect => new Rectangle(Pos, Size);
+
+        public abstract void Draw();
+
+        public abstract void Update();
+
+        public bool Collision(ICollision obj)
+        {
+            return obj.Rect.IntersectsWith(this.Rect);
         }
     }
 }
