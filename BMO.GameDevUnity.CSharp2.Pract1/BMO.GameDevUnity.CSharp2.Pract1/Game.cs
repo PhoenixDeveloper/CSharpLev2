@@ -96,6 +96,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static public void Init(Form form)
         {            
             gameForm = form;
+            asteroids.Clear();
+            bullets.Clear();
+            energyBoosts.Clear();
             // Графическое устройство для вывода графики            
             Graphics g;
             // предоставляет доступ к главному буферу графического контекста для текущего приложения
@@ -159,7 +162,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             Image imageComet = Image.FromFile(@"Pictures\Comet.png");
             for (int i = 0; i < (objs.Length *  70 / 100) ; i++)
             {
-                objs[i] = new Star(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(7, 15)*(int)Math.Pow(-1, i), random.Next(7, 15) * (int)Math.Pow(-1, i)), new Size(1, 1), Pens.Red);
+                objs[i] = new Star(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(7, 15)*(int)Math.Pow(-1, i), random.Next(7, 15) * (int)Math.Pow(-1, i)), new Size(1, 1), Pens.Silver);
             }
             for (int i = (objs.Length * 70 / 100); i < (objs.Length * 85 / 100) ; i++)
             {
@@ -181,6 +184,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             gameForm.Visible = false;
             timer.Stop();
+            timer.Tick -= Timer_Tick;
             MessageBox.Show($"{obj}\nStore: {Store}");
             SplashScreen.ViewForm();
         }
@@ -228,6 +232,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
                 {
                     ship.EnergyHigh(energyBoost.BoostEnergy);
                     objectsRemove.Add(energyBoost);
+                    logCollision(energyBoost, ship);
                 }
             }
 
