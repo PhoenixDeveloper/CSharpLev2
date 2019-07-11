@@ -14,12 +14,21 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         private int energy = 100;
         public int Energy => energy;
 
-        public void EnergyLow(int n)
+        public void EnergyLow(int countEnergy)
         {
-            energy -= n;
+            energy -= countEnergy;
             if (Energy <= 0)
             {
                 Die();
+            }
+        }
+
+        public void EnergyHigh(int countEnergy)
+        {
+            energy += countEnergy;
+            if (Energy > 100)
+            {
+                energy = 100;
             }
         }
 

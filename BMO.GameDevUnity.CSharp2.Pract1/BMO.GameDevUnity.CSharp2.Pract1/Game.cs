@@ -24,6 +24,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         public delegate void LogDelegate(BaseObject object1, BaseObject object2);
         static LogDelegate logCollision;
+
+        static Image imageEnergyBoost = Image.FromFile(@"Pictures\EnergyBoost.png");
         // Свойства
         // Ширина и высота игрового поля
         static public int Width
@@ -68,6 +70,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static List<Asteroid> asteroids = new List<Asteroid>();
         static List<Bullet> bullets = new List<Bullet>();
         static List<BaseObject> objectsRemove = new List<BaseObject>();
+        static List<EnergyBoost> energyBoosts = new List<EnergyBoost>();
         static Ship ship;
 
         static public void Init(Form form)
@@ -107,8 +110,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         private static void Timer_Tick(object sender, EventArgs e)
         {
+            if (random.NextDouble() > 0.95)
+            {
+                asteroids.Add(new Asteroid(new Point(Width - 10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(30, 30), random.Next(10, 20)));
+            }
+            if (random.NextDouble() > 0.92)
+            {
+                energyBoosts.Add(new EnergyBoost(new Point(Width - 10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(25, 25), imageEnergyBoost, random.Next(10, 30)));
+            }
             Update();
-            Draw();
+            Draw();            
         }
 
         private static void IsClose(object sender, EventArgs e)
@@ -169,7 +180,11 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             foreach (var bullet in bullets)
             {
                 bullet.Draw();
-            }            
+            }
+            foreach (var energyBoost in energyBoosts)
+            {
+                energyBoost.Draw();
+            }
             buffer.Render();
         }
 
@@ -177,9 +192,21 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             objectsRemove.Clear();
 
+            ship.Update();
+
             foreach (BaseObject obj in objs)
             {
                 obj.Update();              
+            }
+
+            foreach (var energyBoost in energyBoosts)
+            {
+                energyBoost.Update();
+                if (energyBoost.Collision(ship))
+                {
+                    ship.EnergyHigh(energyBoost.BoostEnergy);
+                    objectsRemove.Add(energyBoost);
+                }
             }
 
             foreach (var asteroid in asteroids)
@@ -219,6 +246,10 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
                 if (objectRemove is Bullet)
                 {
                     bullets.Remove((Bullet)objectRemove);
+                }
+                if (objectRemove is EnergyBoost)
+                {
+                    energyBoosts.Remove((EnergyBoost)objectRemove);
                 }
             }
         }
