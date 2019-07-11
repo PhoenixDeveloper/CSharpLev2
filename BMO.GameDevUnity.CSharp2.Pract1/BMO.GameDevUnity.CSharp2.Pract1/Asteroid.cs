@@ -10,15 +10,24 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
     class Asteroid : BaseObject
     {
         public int Power { get; set; }
+        public int Cost { get; set; }
 
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            Power = 1;
+            Power = 10;
+            Cost = 10;
         }
 
         public Asteroid(Point pos, Point dir, Size size, int power) : base(pos, dir, size)
         {
             Power = power;
+            Cost = 10;
+        }
+
+        public Asteroid(Point pos, Point dir, Size size, int power, int cost) : base(pos, dir, size)
+        {
+            Power = power;
+            Cost = cost;
         }
 
         public override void Draw()

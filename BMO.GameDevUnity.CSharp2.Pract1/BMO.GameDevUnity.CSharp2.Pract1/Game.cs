@@ -26,6 +26,26 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static LogDelegate logCollision;
 
         static Image imageEnergyBoost = Image.FromFile(@"Pictures\EnergyBoost.png");
+
+        static int store = 0;
+        static public int Store
+        {
+            get
+            {
+                return store;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new GameObjectException();
+                }
+                else
+                {
+                    store = value;
+                }
+            }
+        }
         // Свойства
         // Ширина и высота игрового поля
         static public int Width
@@ -99,6 +119,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
             logCollision = LogConsoleCollision;
             logCollision += LogFileCollision;
+
+            Store = 0;
         }
 
         private static void GameForm_KeyDown(object sender, KeyEventArgs e)
@@ -159,7 +181,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             gameForm.Visible = false;
             timer.Stop();
-            MessageBox.Show(obj);
+            MessageBox.Show($"{obj}\nStore: {Store}");
             SplashScreen.ViewForm();
         }
 
@@ -167,7 +189,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             //Проверяем вывод графики
             buffer.Graphics.Clear(Color.Black);
-            buffer.Graphics.DrawString($"Energy: {ship.Energy}%", SystemFonts.DefaultFont, Brushes.Aqua, new Point(0, 0));
+            buffer.Graphics.DrawString($"Energy: {ship.Energy}%\nStore: {Store}", SystemFonts.DefaultFont, Brushes.Aqua, new Point(0, 0));
             ship.Draw();
             foreach (BaseObject obj in objs)
             {
@@ -217,7 +239,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
                     if (asteroid.Collision(bullet))
                     {
                         System.Media.SystemSounds.Hand.Play();
-                        
+                        Store += asteroid.Cost;
+
                         objectsRemove.Add(asteroid);
                         objectsRemove.Add(bullet);
                         logCollision(asteroid, bullet);
