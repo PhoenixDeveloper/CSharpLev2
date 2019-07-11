@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace BMO.GameDevUnity.CSharp2.Pract1
 {
@@ -20,6 +21,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static Random random = new Random();
 
         static Timer timer = new Timer();
+
+        public delegate void LogDelegate(BaseObject object1, BaseObject object2);
+        static LogDelegate logCollision;
         // Свойства
         // Ширина и высота игрового поля
         static public int Width
@@ -67,7 +71,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         static Ship ship;
 
         static public void Init(Form form)
-        {
+        {            
             gameForm = form;
             // Графическое устройство для вывода графики            
             Graphics g;
@@ -89,6 +93,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             timer.Start();
 
             gameForm.KeyDown += GameForm_KeyDown;
+
+            logCollision = LogConsoleCollision;
+            logCollision += LogFileCollision;
         }
 
         private static void GameForm_KeyDown(object sender, KeyEventArgs e)
@@ -183,13 +190,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
                     if (asteroid.Collision(bullet))
                     {
                         System.Media.SystemSounds.Hand.Play();
+                        
                         objectsRemove.Add(asteroid);
                         objectsRemove.Add(bullet);
+                        logCollision(asteroid, bullet);
                     }
                 }
                 if (ship.Collision(asteroid))
                 {
                     ship.EnergyLow(asteroid.Power);
+                    logCollision(asteroid, ship);
                 }
             }
             
@@ -221,5 +231,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
         }
 
+        static void LogConsoleCollision(BaseObject object1, BaseObject object2)
+        {
+            Console.WriteLine($"{DateTime.Now}:{DateTime.Now.Millisecond} : В точке ({object1.DirX}; {object1.DirY}) столкнулись {object1.GetType().Name} и {object2.GetType().Name}");
+        }
+
+        static void LogFileCollision(BaseObject object1, BaseObject object2)
+        {
+            File.AppendAllText("LogCollision.log", $"{DateTime.Now}:{DateTime.Now.Millisecond} : В точке ({object1.DirX}; {object1.DirY}) столкнулись {object1.GetType().Name} и {object2.GetType().Name}\n");
+        }
     }
 }
