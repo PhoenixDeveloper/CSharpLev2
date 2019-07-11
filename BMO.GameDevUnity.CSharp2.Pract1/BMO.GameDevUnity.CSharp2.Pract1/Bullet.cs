@@ -9,14 +9,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 {
     class Bullet : BaseObject
     {
-        public Bullet(Point pos, Point dir, Size size)
+        public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            PosX = pos.X;
-            PosY = pos.Y;
-            DirX = dir.X;
-            DirY = dir.Y;
-            SizeWidth = size.Width;
-            SizeHeight = size.Height;
         }
 
         public override void Draw()
@@ -26,7 +20,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         public override void Update()
         {
-            PosX = Pos.X + 3;
+            PosX = Pos.X + 3;            
         }
     }
 }

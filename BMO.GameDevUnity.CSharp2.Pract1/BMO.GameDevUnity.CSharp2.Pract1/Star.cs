@@ -23,24 +23,12 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
         }
 
-        public Star(Point pos, Point dir, Size size)
+        public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            PosX = pos.X;
-            PosY = pos.Y;
-            DirX = dir.X;
-            DirY = dir.Y;
-            SizeWidth = size.Width;
-            SizeHeight = size.Height;
         }
 
-        public Star(Point pos, Point dir, Size size, Pen color)
+        public Star(Point pos, Point dir, Size size, Pen color) : base(pos, dir, size)
         {
-            PosX = pos.X;
-            PosY = pos.Y;
-            DirX = dir.X;
-            DirY = dir.Y;
-            SizeWidth = size.Width;
-            SizeHeight = size.Height;
             Color = color;
         }
 

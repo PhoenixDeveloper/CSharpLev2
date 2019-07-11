@@ -12,10 +12,11 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
     {
         static Form gameForm;
 
+        static int countAsteroids = 5;
+
         static BufferedGraphicsContext context;
         static public BufferedGraphics buffer;
 
-        static int width, height;
         static Random random = new Random();
 
         static Timer timer = new Timer();
@@ -25,13 +26,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             get
             {
-                return width;
+                return gameForm.ClientSize.Width;
             }
             set
             {
                 if (value>=0 && value <= 1000)
                 {
-                    width = value;
+                    gameForm.Width = value;
                 }
                 else
                 {
@@ -44,13 +45,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             get
             {
-                return height;
+                return gameForm.ClientSize.Height;
             }
             set
             {
                 if (value >= 0 && value <= 1000)
                 {
-                    height = value;
+                    gameForm.Height = value;
                 }
                 else
                 {
@@ -60,8 +61,10 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         }
 
         static BaseObject[] objs;
-
-        static Bullet bullet;
+        static List<Asteroid> asteroids = new List<Asteroid>();
+        static List<Bullet> bullets = new List<Bullet>();
+        static List<BaseObject> objectsRemove = new List<BaseObject>();
+        static Ship ship;
 
         static public void Init(Form form)
         {
@@ -84,6 +87,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             timer.Interval = 100;
             timer.Tick += Timer_Tick;
             timer.Start();
+
+            gameForm.KeyDown += GameForm_KeyDown;
+        }
+
+        private static void GameForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ControlKey) bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 4), new Point(4, 0), new Size(5, 1)));
+            if (e.KeyCode == Keys.Up) ship.Up();
+            if (e.KeyCode == Keys.Down) ship.Down();
         }
 
         private static void Timer_Tick(object sender, EventArgs e)
@@ -102,45 +114,103 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         static public void Load()
         {
-            objs = new BaseObject[46];
+            objs = new BaseObject[1000];
             Image imagePlanet = Image.FromFile(@"Pictures\Planet.png");
             Image imageComet = Image.FromFile(@"Pictures\Comet.png");
-            Image imageCircle = Image.FromFile(@"Pictures\Circle.png");
+            for (int i = 0; i < (objs.Length *  70 / 100) ; i++)
+            {
+                objs[i] = new Star(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(7, 15)*(int)Math.Pow(-1, i), random.Next(7, 15) * (int)Math.Pow(-1, i)), new Size(1, 1), Pens.Red);
+            }
+            for (int i = (objs.Length * 70 / 100); i < (objs.Length * 85 / 100) ; i++)
+            {
+                objs[i] = new Comet(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(10, 25) * (int)Math.Pow(-1, i), random.Next(10, 25) * (int)Math.Pow(-1, i)), new Size(3, 3), imageComet);
+            }
+            for (int i = (objs.Length * 85 / 100) ; i < objs.Length; i++)
+            {
+                objs[i] = new Planet(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(10) * (int)Math.Pow(-1, i), random.Next(10) * (int)Math.Pow(-1, i)), new Size(5, 5), imagePlanet);            
+            }
+            for (int i = 0; i < countAsteroids; i++)
+            {
+                asteroids.Add(new Asteroid(new Point(Width-10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(30, 30), random.Next(10, 20)));
+            }
+            ship = new Ship(new Point(10, 200), new Point(5, 5), new Size(50, 50));
+            ship.messageDie += Ship_messageDie;
+        }
 
-            for (int i = 0; i < (objs.Length * 90 / 100) ; i++)
-                objs[i] = new Star(new Point(650, i * 20), new Point(15 - i, 15 - i), new Size(35, 35), Pens.Red);
-            for (int i = (objs.Length * 90 / 100); i < (objs.Length * 99 / 100) ; i++)
-                objs[i] = new Comet(new Point(600, i*15), new Point(2*i*(int)Math.Pow(-1, i), i * (int)Math.Pow(-1, i)), new Size(60, 60), imageComet);
-            for (int i = (objs.Length * 99 / 100) ; i < objs.Length; i++)
-                objs[i] = new Planet(new Point(300, 300+i*(int)Math.Pow(-1, i)), new Point((int)Math.Pow(-1.05, i), -(int)Math.Pow(-1.05, i)), new Size(160, 160), imagePlanet);
-            bullet = new Bullet(new Point(0, 200), new Point(0, 0), new Size(10, 10));
+        private static void Ship_messageDie(string obj)
+        {
+            gameForm.Visible = false;
+            timer.Stop();
+            MessageBox.Show(obj);
+            SplashScreen.ViewForm();
         }
 
         static public void Draw()
         {
             //Проверяем вывод графики
             buffer.Graphics.Clear(Color.Black);
+            buffer.Graphics.DrawString($"Energy: {ship.Energy}%", SystemFonts.DefaultFont, Brushes.Aqua, new Point(0, 0));
+            ship.Draw();
             foreach (BaseObject obj in objs)
             {
                 obj.Draw();
             }
-            bullet.Draw();
+            foreach (var asteroid in asteroids)
+            {
+                asteroid.Draw();
+            }
+            foreach (var bullet in bullets)
+            {
+                bullet.Draw();
+            }            
             buffer.Render();
         }
 
         static public void Update()
         {
+            objectsRemove.Clear();
+
             foreach (BaseObject obj in objs)
             {
-                obj.Update();
-                if (obj.Collision(bullet))
+                obj.Update();              
+            }
+
+            foreach (var asteroid in asteroids)
+            {
+                asteroid.Update();
+                foreach (var bullet in bullets)
                 {
-                    obj.PosX = random.Next(Width);
-                    obj.PosY = random.Next(Height);
+                    if (asteroid.Collision(bullet))
+                    {
+                        System.Media.SystemSounds.Hand.Play();
+                        objectsRemove.Add(asteroid);
+                        objectsRemove.Add(bullet);
+                    }
+                }
+                if (ship.Collision(asteroid))
+                {
+                    ship.EnergyLow(asteroid.Power);
                 }
             }
-                
-            bullet.Update();
+            
+            foreach (var bullet in bullets)
+            {
+                if (bullet.PosX + bullet.SizeWidth > Game.Width) objectsRemove.Add(bullet);
+                if (bullet.PosY + bullet.SizeHeight > Game.Height) objectsRemove.Add(bullet);
+                bullet.Update();
+            }
+
+            foreach (var objectRemove in objectsRemove)
+            {
+                if (objectRemove is Asteroid)
+                {
+                    asteroids.Remove((Asteroid)objectRemove);
+                }
+                if (objectRemove is Bullet)
+                {
+                    bullets.Remove((Bullet)objectRemove);
+                }
+            }
         }
 
         static private void CheckWindowSize(Form form)

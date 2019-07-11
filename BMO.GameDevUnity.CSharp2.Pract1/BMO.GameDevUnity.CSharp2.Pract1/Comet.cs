@@ -10,15 +10,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
     class Comet:BaseObject
     {
 
-        public Comet(Point pos, Point dir, Size size, Image image)
+        public Comet(Point pos, Point dir, Size size, Image image) : base(pos, dir, size, image)
         {
-            PosX = pos.X;
-            PosY = pos.Y;
-            DirX = dir.X;
-            DirY = dir.Y;
-            SizeWidth = size.Width;
-            SizeHeight = size.Height;
-            Image = image;
         }
 
         public override void Draw()
