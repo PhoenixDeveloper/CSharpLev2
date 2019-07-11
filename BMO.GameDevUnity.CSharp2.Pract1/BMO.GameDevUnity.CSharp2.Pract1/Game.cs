@@ -10,11 +10,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 {
     static class Game
     {
+        static Form gameForm;
+
         static BufferedGraphicsContext context;
         static public BufferedGraphics buffer;
 
         static int width, height;
         static Random random = new Random();
+
+        static Timer timer = new Timer();
         // Свойства
         // Ширина и высота игрового поля
         static public int Width
@@ -61,6 +65,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         static public void Init(Form form)
         {
+            gameForm = form;
             // Графическое устройство для вывода графики            
             Graphics g;
             // предоставляет доступ к главному буферу графического контекста для текущего приложения
@@ -75,7 +80,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             buffer = context.Allocate(g, new Rectangle(0, 0, Width, Height));
             //Draw();
             Load();
-            Timer timer = new Timer();
+            gameForm.FormClosing += IsClose;
             timer.Interval = 100;
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -85,6 +90,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             Update();
             Draw();
+        }
+
+        private static void IsClose(object sender, EventArgs e)
+        {
+            gameForm.Visible = false;
+            timer.Stop();
+            MessageBox.Show("Спасибо за игру");                
+            SplashScreen.ViewForm();
         }
 
         static public void Load()
@@ -107,7 +120,6 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             //Проверяем вывод графики
             buffer.Graphics.Clear(Color.Black);
-
             foreach (BaseObject obj in objs)
             {
                 obj.Draw();
