@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMO.GameDevUnity.CSharp2.Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workers", "Workers\Workers.csproj", "{C496A7F3-B372-404F-A307-452DBF475702}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delegates_Observer", "Delegates_Observer\Delegates_Observer.csproj", "{89ACC6B6-B8EF-492E-8142-64B4637654EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C496A7F3-B372-404F-A307-452DBF475702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C496A7F3-B372-404F-A307-452DBF475702}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C496A7F3-B372-404F-A307-452DBF475702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89ACC6B6-B8EF-492E-8142-64B4637654EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89ACC6B6-B8EF-492E-8142-64B4637654EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89ACC6B6-B8EF-492E-8142-64B4637654EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89ACC6B6-B8EF-492E-8142-64B4637654EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
