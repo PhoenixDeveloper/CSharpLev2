@@ -164,6 +164,27 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             }
         }
 
+        public BaseObject(Point pos, Point dir, Size size)
+        {
+            PosX = pos.X;
+            PosY = pos.Y;
+            DirX = dir.X;
+            DirY = dir.Y;
+            SizeWidth = size.Width;
+            SizeHeight = size.Height;
+        }
+
+        public BaseObject(Point pos, Point dir, Size size, Image image)
+        {
+            PosX = pos.X;
+            PosY = pos.Y;
+            DirX = dir.X;
+            DirY = dir.Y;
+            SizeWidth = size.Width;
+            SizeHeight = size.Height;
+            Image = image;
+        }
+
         public Rectangle Rect => new Rectangle(Pos, Size);
 
         public abstract void Draw();

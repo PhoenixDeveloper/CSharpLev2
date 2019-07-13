@@ -9,10 +9,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 {
     static class SplashScreen
     {
-        static Form formTransport;
+        static Form menuForm;
         static int width, height;
         static Button startButton, recordsButton, endButton, showButtons;
         static bool showButtonsBool = true;
+
+        public static void ViewForm()
+        {
+            menuForm.Visible = true;
+        }
         // Свойства
         // Ширина и высота игрового поля
         static public int Width
@@ -54,7 +59,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         static public void Init(Form form)
         {
-            formTransport = form;
+            menuForm = form;
             Width = form.Width;
             Height = form.Height;
             startButton = new Button
@@ -103,16 +108,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
         {
             if (showButtonsBool)
             {
-                formTransport.Controls.Remove(startButton);
-                formTransport.Controls.Remove(recordsButton);
-                formTransport.Controls.Remove(endButton);
+                menuForm.Controls.Remove(startButton);
+                menuForm.Controls.Remove(recordsButton);
+                menuForm.Controls.Remove(endButton);
                 showButtonsBool = false;
             }
             else
             {
-                formTransport.Controls.Add(startButton);
-                formTransport.Controls.Add(recordsButton);
-                formTransport.Controls.Add(endButton);
+                menuForm.Controls.Add(startButton);
+                menuForm.Controls.Add(recordsButton);
+                menuForm.Controls.Add(endButton);
                 showButtonsBool = true;
             }
         }
@@ -129,7 +134,12 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         private static void StartButton_Click(object sender, EventArgs e)
         {
-            Game.Init(formTransport);
+            Form formGame = new Form();
+            formGame.Width = Width;
+            formGame.Height = Height;
+            formGame.Show();            
+            Game.Init(formGame);
+            menuForm.Visible = false;
         }
     }
 }
