@@ -34,14 +34,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         public override void Draw()
         {
-            Game.buffer.Graphics.FillEllipse(Brushes.Wheat, Pos.X, Pos.Y, Size.Width, Size.Height);
+            Game.buffer.Graphics.DrawImage(Image, Pos.X, Pos.Y, Size.Width, Size.Height);
         }
 
         public override void Update()
         {
         }
 
-        public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
+        public Ship(Point pos, Point dir, Size size,Image image) : base(pos, dir, size, image)
         {
         }
 
