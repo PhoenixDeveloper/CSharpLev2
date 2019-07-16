@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delegates_Observer", "Deleg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CountElementsInList", "CountElementsInList\CountElementsInList.csproj", "{4D3223AF-0594-44A9-9255-D364A6B73821}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryOrderBy", "DictionaryOrderBy\DictionaryOrderBy.csproj", "{CDFA8866-A215-45C6-A02C-1D6FFD2FD7AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4D3223AF-0594-44A9-9255-D364A6B73821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3223AF-0594-44A9-9255-D364A6B73821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3223AF-0594-44A9-9255-D364A6B73821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDFA8866-A215-45C6-A02C-1D6FFD2FD7AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDFA8866-A215-45C6-A02C-1D6FFD2FD7AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDFA8866-A215-45C6-A02C-1D6FFD2FD7AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDFA8866-A215-45C6-A02C-1D6FFD2FD7AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
