@@ -19,9 +19,46 @@ namespace CountElementsInList
                 3,
                 2
             };
+            Citizen citizenBuffer = new Citizen("Иванов Иван", 20);
+            List<Citizen> citizens = new List<Citizen>()
+            {
+                citizenBuffer,
+                new Citizen("Чепчиков Владимир", 34),
+                citizenBuffer
+            };
+            Animal animalBuffer = new Animal("Человек разумный", false, 1000);
+            List<Animal> animals = new List<Animal>()
+            {
+                animalBuffer,
+                animalBuffer,
+                animalBuffer
+            };
+            for (int i = 0; i < 10; i++)
+            {
+                citizens.Add(new Citizen());
+                animals.Add(new Animal());
+            }
+            Console.WriteLine("Список Integer:");
             foreach (var element in countElementInListInteger(listInteger))
             {
                 Console.WriteLine($"Число {element.Key} встречается в списке {element.Value} раз");
+            }
+            Console.WriteLine("Список Citizen");
+            foreach (var citizen in countElementInGenericList(citizens))
+            {
+                Console.WriteLine($"Гражданин с именем {citizen.Key.Name}, {citizen.Key.Age} лет встречается в списке {citizen.Value} раз");
+            }
+            Console.WriteLine("Список Animal");
+            foreach (var animal in countElementInGenericList(animals))
+            {
+                if (animal.Key.Rare)
+                {
+                    Console.WriteLine($"Животное редкого вида {animal.Key.Kind} ценностью {animal.Key.Worth} встречается в списке {animal.Value} раз");
+                }
+                else
+                {
+                    Console.WriteLine($"Животное вида {animal.Key.Kind} ценностью {animal.Key.Worth} встречается в списке {animal.Value} раз");
+                }
             }
             Console.ReadKey();
         }
@@ -30,6 +67,21 @@ namespace CountElementsInList
         {
             list.Sort();
             Dictionary<int, int> count = new Dictionary<int, int>();
+            foreach (var element in list)
+            {
+                if (!count.ContainsKey(element))
+                {
+                    count.Add(element, 0);
+                }
+                count[element]++;
+            }
+            return count;
+        }
+
+        static Dictionary<T, int> countElementInGenericList<T>(List<T> list)
+        {
+            list.Sort();
+            Dictionary<T, int> count = new Dictionary<T, int>();
             foreach (var element in list)
             {
                 if (!count.ContainsKey(element))
