@@ -128,21 +128,17 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
 
         private static void GameForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ControlKey) bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 4), new Point(4, 0), new Size(5, 1)));
+            if (e.KeyCode == Keys.ControlKey) bullets.Add(new Bullet(new Point(ship.Rect.X + ship.SizeWidth, ship.Rect.Y + ship.SizeHeight/2), new Point(4, 0), new Size(5, 1)));
             if (e.KeyCode == Keys.Up) ship.Up();
             if (e.KeyCode == Keys.Down) ship.Down();
         }
 
         private static void Timer_Tick(object sender, EventArgs e)
         {
-            if (random.NextDouble() > 0.95)
+            if (asteroids.Count == 0)
             {
-                asteroids.Add(new Asteroid(new Point(Width - 10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(30, 30), random.Next(10, 20)));
-            }
-            if (random.NextDouble() > 0.92)
-            {
-                energyBoosts.Add(new EnergyBoost(new Point(Width - 10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(25, 25), imageEnergyBoost, random.Next(10, 30)));
-            }
+                CreateAsteroids();
+            }            
             Update();
             Draw();            
         }
@@ -160,6 +156,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             objs = new BaseObject[1000];
             Image imagePlanet = Image.FromFile(@"Pictures\Planet.png");
             Image imageComet = Image.FromFile(@"Pictures\Comet.png");
+            Image imageShip = Image.FromFile(@"Pictures\SpaceShip.png");
             for (int i = 0; i < (objs.Length *  70 / 100) ; i++)
             {
                 objs[i] = new Star(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(7, 15)*(int)Math.Pow(-1, i), random.Next(7, 15) * (int)Math.Pow(-1, i)), new Size(1, 1), Pens.Silver);
@@ -172,13 +169,20 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
             {
                 objs[i] = new Planet(new Point(random.Next(Width), random.Next(Height)), new Point(random.Next(10) * (int)Math.Pow(-1, i), random.Next(10) * (int)Math.Pow(-1, i)), new Size(5, 5), imagePlanet);            
             }
-            for (int i = 0; i < countAsteroids; i++)
-            {
-                asteroids.Add(new Asteroid(new Point(Width-10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(30, 30), random.Next(10, 20)));
-            }
-            ship = new Ship(new Point(10, 200), new Point(5, 5), new Size(50, 50));
+            CreateAsteroids();
+            ship = new Ship(new Point(10, 200), new Point(5, 5), new Size(50, 50), imageShip);
             ship.messageDie += Ship_messageDie;
         }
+
+        private static void CreateAsteroids()
+        {
+            for (int i = 0; i < countAsteroids; i++)
+            {
+                asteroids.Add(new Asteroid(new Point(Width - 10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(30, 30), random.Next(10, 20)));
+            }
+            countAsteroids++;
+        }
+
 
         private static void Ship_messageDie(string obj)
         {
@@ -249,11 +253,18 @@ namespace BMO.GameDevUnity.CSharp2.Pract1
                         objectsRemove.Add(asteroid);
                         objectsRemove.Add(bullet);
                         logCollision(asteroid, bullet);
+
+                        if (random.NextDouble() * 100 > ship.Energy)
+                        {
+                            energyBoosts.Add(new EnergyBoost(new Point(Width - 10, random.Next(Height)), new Point(-random.Next(3, 30), random.Next(3, 30)), new Size(25, 25), imageEnergyBoost, random.Next(10, 30)));
+                        }
                     }
                 }
-                if (ship.Collision(asteroid))
+                if (asteroid.Collision(ship))
                 {
                     ship.EnergyLow(asteroid.Power);
+                    asteroid.DirX = -asteroid.DirX;
+                    asteroid.DirY = -asteroid.DirY;
                     logCollision(asteroid, ship);
                 }
             }
