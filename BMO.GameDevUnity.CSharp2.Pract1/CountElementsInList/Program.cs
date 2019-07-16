@@ -60,6 +60,26 @@ namespace CountElementsInList
                     Console.WriteLine($"Животное вида {animal.Key.Kind} ценностью {animal.Key.Worth} встречается в списке {animal.Value} раз");
                 }
             }
+            Dictionary<Animal, int> countAnimals = new Dictionary<Animal, int>();
+            List<Animal> animalsBuffer = animals.ToList();
+            while (!(animalsBuffer.Count == 0))
+            {
+                animalBuffer = animalsBuffer[0];
+                countAnimals.Add(animalBuffer, animalsBuffer.FindAll(i => i == animalBuffer).Count);
+                animalsBuffer.RemoveAll(i => i == animalBuffer);
+            }
+            Console.WriteLine("Список Animal при помощи Linq-запросов");
+            foreach (var animal in countAnimals)
+            {
+                if (animal.Key.Rare)
+                {
+                    Console.WriteLine($"Животное редкого вида {animal.Key.Kind} ценностью {animal.Key.Worth} встречается в списке {animal.Value} раз");
+                }
+                else
+                {
+                    Console.WriteLine($"Животное вида {animal.Key.Kind} ценностью {animal.Key.Worth} встречается в списке {animal.Value} раз");
+                }
+            }
             Console.ReadKey();
         }
 
