@@ -35,7 +35,6 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             myOrganization.Add("Административный", new Department() { Name = "Административный" });
             myOrganization.Add("Экономический", new Department() { Name = "Экономический" });
             UpdateCheckBoxDepartments();
-            cbDepartments.Text = cbDepartments.Items[0].ToString();
         }
 
         private void BtnButton1_Click(object sender, RoutedEventArgs e)
@@ -72,6 +71,17 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             {
                 cbDepartments.Items.Add(department.Key);
             }
+            if (cbDepartments.Items.Count != 0)
+            {
+                cbDepartments.SelectedItem = cbDepartments.Items[cbDepartments.Items.Count - 1];
+                cbDepartments.Text = (cbDepartments.Items.Count == 1)?(cbDepartments.Text = cbDepartments.Items[cbDepartments.Items.IndexOf(cbDepartments.SelectedItem)].ToString()):(cbDepartments.Items[0].ToString());
+                UpdateListBoxEmployee(cbDepartments.Text);
+            }
+            else
+            {
+                lbEmployees.Items.Clear();
+                MessageBox.Show("Список департаментов пуст. Для продолжения работы создайте департаменты.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         void UpdateListBoxEmployee(string NameOfDepartment)
@@ -92,7 +102,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void CbDepartments_DropDownClosed(object sender, EventArgs e)
         {
-            UpdateListBoxEmployee(cbDepartments.Text);
+            if (cbDepartments.Items.Count != 0)
+            {
+                UpdateListBoxEmployee(cbDepartments.Text);
+            }
+            else
+            {
+                MessageBox.Show("Список департаментов пуст. Для продолжения работы создайте департаменты.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
+            }            
         }
 
         private void MiLoad_Click(object sender, RoutedEventArgs e)
@@ -108,7 +125,6 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 UpdateCheckBoxDepartments();
                 if (cbDepartments.Items.Count != 0)
                 {                    
-                    cbDepartments.Text = cbDepartments.Items[0].ToString();
                     UpdateListBoxEmployee(cbDepartments.Text);
                 }                
                 fStream.Close();
@@ -140,6 +156,32 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 cbDepartments.Text = wndNewDepartment.NameOfDepartment;
                 UpdateListBoxEmployee(wndNewDepartment.NameOfDepartment);
             };
+        }
+
+        private void BtnDeleteEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            if (lbEmployees.SelectedItem != null)
+            {
+                myOrganization[cbDepartments.Text].Remove((Employee)lbEmployees.SelectedItem);
+                UpdateListBoxEmployee(cbDepartments.Text);
+            }
+            else
+            {
+                MessageBox.Show("Не выбран сотрудник", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnDeleteDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbDepartments.Items.Count != 0)
+            {
+                myOrganization.Remove(cbDepartments.Text);
+                UpdateCheckBoxDepartments();
+            }
+            else
+            {
+                MessageBox.Show("Список департаментов пуст", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

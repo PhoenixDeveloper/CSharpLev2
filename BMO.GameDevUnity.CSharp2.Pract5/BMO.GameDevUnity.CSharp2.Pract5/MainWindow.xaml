@@ -35,8 +35,10 @@
         </Menu>
         <ListBox x:Name="lbEmployees" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20"/>
         <ComboBox x:Name="cbDepartments" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" Text="" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed"/>
-        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add Employee" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
-        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,70" Content="Add Department" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddDepartment" Click="BtnAddDepartment_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add employee" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,70" Content="Add department" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddDepartment" Click="BtnAddDepartment_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,140,20" Content="Delete employee" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnDeleteEmployee" Click="BtnDeleteEmployee_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,140,70" Content="Delete department" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnDeleteDepartment" Click="BtnDeleteDepartment_Click"/>
     </Grid>
 
 </Window>
