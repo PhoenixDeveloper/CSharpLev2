@@ -58,6 +58,9 @@
     <Compile Include="Department.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="Organization.cs" />
+    <Compile Include="wndNewDepartment.xaml.cs">
+      <DependentUpon>wndNewDepartment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="wndNewEmployee.xaml.cs">
       <DependentUpon>wndNewEmployee.xaml</DependentUpon>
     </Compile>
@@ -73,6 +76,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="wndNewDepartment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="wndNewEmployee.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

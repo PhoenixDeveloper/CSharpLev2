@@ -129,5 +129,17 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 fileStream.Close();
             }
         }
+
+        private void BtnAddDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            wndNewDepartment wndNewDepartment = new wndNewDepartment();
+            if (wndNewDepartment.ShowDialog() == true)
+            {
+                myOrganization.Add(wndNewDepartment.NameOfDepartment, new Department() { Name = wndNewDepartment.NameOfDepartment });
+                UpdateCheckBoxDepartments();
+                cbDepartments.Text = wndNewDepartment.NameOfDepartment;
+                UpdateListBoxEmployee(wndNewDepartment.NameOfDepartment);
+            };
+        }
     }
 }

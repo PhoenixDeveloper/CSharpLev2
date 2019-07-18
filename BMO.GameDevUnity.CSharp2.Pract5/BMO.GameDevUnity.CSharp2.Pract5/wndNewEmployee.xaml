@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BMO.GameDevUnity.CSharp2.Pract5"
         mc:Ignorable="d"
-        Title="wndNewEmployee" Height="300" Width="350">
+        Title="Добавление нового сотрудника" Height="300" Width="350">
     <StackPanel Margin="0,0,0,0">
         <Label Content="First Name"/>
         <TextBox Name="tbFirstName" Width="300" HorizontalAlignment="Left"/>

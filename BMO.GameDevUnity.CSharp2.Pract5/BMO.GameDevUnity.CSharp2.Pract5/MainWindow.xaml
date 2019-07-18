@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BMO.GameDevUnity.CSharp2.Pract5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Сотрудники организации" Height="450" Width="800">
     <Window.Resources>
         <SolidColorBrush x:Key="Brush1" Color="Azure"/>
     </Window.Resources>
@@ -35,7 +35,8 @@
         </Menu>
         <ListBox x:Name="lbEmployees" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20"/>
         <ComboBox x:Name="cbDepartments" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" Text="" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed"/>
-        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add Employee" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,70" Content="Add Department" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddDepartment" Click="BtnAddDepartment_Click"/>
     </Grid>
 
 </Window>
