@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Xml.Serialization;
+using Microsoft.Win32;
 
 namespace BMO.GameDevUnity.CSharp2.Pract5
 {
@@ -23,6 +24,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
     public partial class MainWindow : Window
     {
         static public Organization myOrganization;
+        static string fileName = "data.xml";
 
         public MainWindow()
         {
@@ -32,10 +34,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             myOrganization.Add("Информационный", new Department() { Name = "Информационный" });
             myOrganization.Add("Административный", new Department() { Name = "Административный" });
             myOrganization.Add("Экономический", new Department() { Name = "Экономический" });
-            foreach (var department in myOrganization)
-            {
-                cbDepartments.Items.Add(department.Key);
-            }
+            UpdateCheckBoxDepartments();
             cbDepartments.Text = cbDepartments.Items[0].ToString();
         }
 
@@ -66,6 +65,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             };
         }
 
+        void UpdateCheckBoxDepartments()
+        {
+            cbDepartments.Items.Clear();
+            foreach (var department in myOrganization)
+            {
+                cbDepartments.Items.Add(department.Key);
+            }
+        }
+
         void UpdateListBoxEmployee(string NameOfDepartment)
         {
             lbEmployees.Items.Clear();
@@ -75,9 +83,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void MiSave_Click(object sender, RoutedEventArgs e)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Department));
-            FileStream fileStream = new FileStream("data.xml", FileMode.Create, FileAccess.Write);
-            xmlSerializer.Serialize(fileStream, myOrganization["Информационный"]);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Organization));
+            FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+            xmlSerializer.Serialize(fileStream, myOrganization);
             fileStream.Close();
 
         }
@@ -85,6 +93,41 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         private void CbDepartments_DropDownClosed(object sender, EventArgs e)
         {
             UpdateListBoxEmployee(cbDepartments.Text);
+        }
+
+        private void MiLoad_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "XML files(*.xml)| *.xml";
+            if (ofd.ShowDialog() == true)
+            {
+                fileName = ofd.FileName;
+                XmlSerializer xmlFormat = new XmlSerializer(typeof(Organization));
+                Stream fStream = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read);
+                myOrganization = (Organization)xmlFormat.Deserialize(fStream);
+                UpdateCheckBoxDepartments();
+                if (cbDepartments.Items.Count != 0)
+                {                    
+                    cbDepartments.Text = cbDepartments.Items[0].ToString();
+                    UpdateListBoxEmployee(cbDepartments.Text);
+                }                
+                fStream.Close();
+            }
+                
+        }
+
+        private void MiSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "XML files(*.xml)| *.xml";
+            if (sfd.ShowDialog() == true)
+            {
+                fileName = sfd.FileName;
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(Organization));
+                FileStream fileStream = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write);
+                xmlSerializer.Serialize(fileStream, myOrganization);
+                fileStream.Close();
+            }
         }
     }
 }

@@ -27,7 +27,8 @@
         <Menu VerticalAlignment="Top" Grid.Column="0" Grid.ColumnSpan="3" FontSize="18">
             <MenuItem Header="File">
                 <MenuItem Header="Save" Name="miSave" Click="MiSave_Click"></MenuItem>
-                <MenuItem Header="Load"></MenuItem>
+                <MenuItem Header="Save as" Name="miSaveAs" Click="MiSaveAs_Click"></MenuItem>
+                <MenuItem Header="Load" Name="miLoad" Click="MiLoad_Click"></MenuItem>
                 <Separator></Separator>
                 <MenuItem x:Name="miExit" Header="Exit" Click="MiExit_Click"></MenuItem>
             </MenuItem>
