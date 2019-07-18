@@ -183,5 +183,54 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 MessageBox.Show("Список департаментов пуст", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void BtnChangeEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            wndChangeEmployee wndChangeEmployee = new wndChangeEmployee();            
+            if (lbEmployees.SelectedItem != null)
+            {
+                Employee employeeBuffer = (Employee)lbEmployees.SelectedItem;
+                wndChangeEmployee.LastName = employeeBuffer.LastName;
+                wndChangeEmployee.FirstName = employeeBuffer.FirstName;
+                wndChangeEmployee.Profession = employeeBuffer.Profession;
+                wndChangeEmployee.Age = employeeBuffer.Age;
+                wndChangeEmployee.Department = cbDepartments.Text;
+                if (wndChangeEmployee.ShowDialog() == true)
+                {
+                    myOrganization[cbDepartments.Text].Remove((Employee)lbEmployees.SelectedItem);
+                    myOrganization[wndChangeEmployee.Department].Add(wndChangeEmployee.ForExchange);
+                    cbDepartments.Text = wndChangeEmployee.Department;
+                    UpdateListBoxEmployee(wndChangeEmployee.Department);
+                };
+            }
+            else
+            {
+                MessageBox.Show("Не выбран сотрудник", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }            
+        }
+
+        private void BtnChangeDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            wndChangeDepartment wndChangeDepartment = new wndChangeDepartment();
+            if (cbDepartments.Items.Count != 0)
+            {
+                Department employeesBuffer = myOrganization[cbDepartments.Text];
+                wndChangeDepartment.Department = cbDepartments.Text;
+                if (wndChangeDepartment.ShowDialog() == true)
+                {
+                    myOrganization.Remove(cbDepartments.Text);
+                    employeesBuffer.Name = wndChangeDepartment.Department;
+                    myOrganization.Add(wndChangeDepartment.Department, employeesBuffer);
+                    UpdateCheckBoxDepartments();
+                    cbDepartments.Text = wndChangeDepartment.Department;
+                    UpdateListBoxEmployee(wndChangeDepartment.Department);
+                };                
+            }
+            else
+            {
+                MessageBox.Show("Список департаментов пуст", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
+        }
     }
 }

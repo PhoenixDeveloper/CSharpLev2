@@ -34,8 +34,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            ForExchange = new Employee(tbLastName.Text, tbFirstName.Text, tbProfession.Text, Convert.ToInt32(tbAge.Text));
-            NameOfDepartment = cbDepartments.Text;
+            try
+            {
+                ForExchange = new Employee(tbLastName.Text, tbFirstName.Text, tbProfession.Text, Convert.ToInt32(tbAge.Text));
+                NameOfDepartment = cbDepartments.Text;
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("Введены некорректные данные", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }   
             this.DialogResult = true;
             this.Close();
         }
