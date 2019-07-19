@@ -34,7 +34,7 @@
             </MenuItem>
         </Menu>
         <ListBox x:Name="lbEmployees" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20" SelectionChanged="LbEmployees_SelectionChanged"/>
-        <ComboBox x:Name="cbDepartments" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" Text="" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed" DataContextChanged="CbDepartments_DataContextChanged"/>
+        <ComboBox x:Name="cbDepartments" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" Text="" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed"/>
         <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
         <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,70" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddDepartment" Click="BtnAddDepartment_Click"/>
         

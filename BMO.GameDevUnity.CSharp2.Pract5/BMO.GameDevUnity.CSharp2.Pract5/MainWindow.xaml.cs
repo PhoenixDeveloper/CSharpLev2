@@ -254,11 +254,6 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             
         }
 
-        private void CbDepartments_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            btnDeleteDepartment.Visibility = Visibility.Visible;
-        }
-
         private void LbEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lbEmployees.SelectedItem != null)
