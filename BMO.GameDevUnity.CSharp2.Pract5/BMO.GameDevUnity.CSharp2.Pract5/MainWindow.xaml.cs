@@ -34,7 +34,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             myOrganization.Add("Информационный", new Department() { Name = "Информационный" });
             myOrganization.Add("Административный", new Department() { Name = "Административный" });
             myOrganization.Add("Экономический", new Department() { Name = "Экономический" });
+
+            btnDeleteEmployee.Visibility = Visibility.Hidden;
+            btnDeleteDepartment.Visibility = Visibility.Hidden;
+
+            btnChangeEmployee.Visibility = Visibility.Hidden;
+            btnChangeDepartment.Visibility = Visibility.Hidden;
+
             UpdateCheckBoxDepartments();
+            
         }
 
         private void BtnButton1_Click(object sender, RoutedEventArgs e)
@@ -47,10 +55,6 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         private void MiExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void WndMain_Loaded(object sender, RoutedEventArgs e)
-        {
         }
 
         private void BtnAddEmployee_Click(object sender, RoutedEventArgs e)
@@ -76,10 +80,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 cbDepartments.SelectedItem = cbDepartments.Items[cbDepartments.Items.Count - 1];
                 cbDepartments.Text = (cbDepartments.Items.Count == 1)?(cbDepartments.Text = cbDepartments.Items[cbDepartments.Items.IndexOf(cbDepartments.SelectedItem)].ToString()):(cbDepartments.Items[0].ToString());
                 UpdateListBoxEmployee(cbDepartments.Text);
+                btnDeleteDepartment.Visibility = Visibility.Visible;
+                btnChangeDepartment.Visibility = Visibility.Visible;
             }
             else
-            {
+            {                
                 lbEmployees.Items.Clear();
+                btnDeleteDepartment.Visibility = Visibility.Hidden;
+                btnChangeDepartment.Visibility = Visibility.Hidden;
                 MessageBox.Show("Список департаментов пуст. Для продолжения работы создайте департаменты.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -89,6 +97,19 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             lbEmployees.Items.Clear();
             foreach (Employee employee in myOrganization[NameOfDepartment])
                 lbEmployees.Items.Add(employee);
+            if (cbDepartments.Items.Count != 0)
+            {
+                btnDeleteDepartment.Visibility = Visibility.Visible;
+                btnChangeDepartment.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnDeleteDepartment.Visibility = Visibility.Hidden;
+                btnChangeDepartment.Visibility = Visibility.Hidden;
+
+                btnDeleteEmployee.Visibility = Visibility.Hidden;
+                btnChangeEmployee.Visibility = Visibility.Hidden;
+            }
         }
 
         private void MiSave_Click(object sender, RoutedEventArgs e)
@@ -231,6 +252,25 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 MessageBox.Show("Список департаментов пуст", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             
+        }
+
+        private void CbDepartments_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            btnDeleteDepartment.Visibility = Visibility.Visible;
+        }
+
+        private void LbEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lbEmployees.SelectedItem != null)
+            {
+                btnDeleteEmployee.Visibility = Visibility.Visible;
+                btnChangeEmployee.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnDeleteEmployee.Visibility = Visibility.Hidden;
+                btnChangeEmployee.Visibility = Visibility.Hidden;
+            }
         }
     }
 }
