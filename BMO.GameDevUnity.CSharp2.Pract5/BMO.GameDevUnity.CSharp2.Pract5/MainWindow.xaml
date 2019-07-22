@@ -33,7 +33,16 @@
                 <MenuItem x:Name="miExit" Header="Exit" Click="MiExit_Click"></MenuItem>
             </MenuItem>
         </Menu>
-        <ListBox x:Name="lbEmployees" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20" SelectionChanged="LbEmployees_SelectionChanged"/>
+        <ListView x:Name="lvEmployees" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20" SelectionChanged="LbEmployees_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Имя" Width="125px" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Фамилия" Width="125px" DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Возраст" Width="100px" DisplayMemberBinding="{Binding Age}" />
+                    <GridViewColumn Header="Профессия" Width="160px" DisplayMemberBinding="{Binding Profession}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         <ComboBox x:Name="cbDepartments" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" Text="" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed"/>
         <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
         <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,70" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddDepartment" Click="BtnAddDepartment_Click"/>

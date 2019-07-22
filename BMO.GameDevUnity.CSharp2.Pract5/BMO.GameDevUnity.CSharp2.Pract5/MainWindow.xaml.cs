@@ -85,7 +85,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             }
             else
             {                
-                lbEmployees.Items.Clear();
+                lvEmployees.Items.Clear();
                 btnDeleteDepartment.Visibility = Visibility.Hidden;
                 btnChangeDepartment.Visibility = Visibility.Hidden;
                 MessageBox.Show("Список департаментов пуст. Для продолжения работы создайте департаменты.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -94,9 +94,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         void UpdateListBoxEmployee(string NameOfDepartment)
         {
-            lbEmployees.Items.Clear();
-            foreach (Employee employee in myOrganization[NameOfDepartment])
-                lbEmployees.Items.Add(employee);
+            lvEmployees.ItemsSource = myOrganization[NameOfDepartment];
+            lvEmployees.Items.Refresh();
             if (cbDepartments.Items.Count != 0)
             {
                 btnDeleteDepartment.Visibility = Visibility.Visible;
@@ -181,9 +180,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnDeleteEmployee_Click(object sender, RoutedEventArgs e)
         {
-            if (lbEmployees.SelectedItem != null)
+            if (lvEmployees.SelectedItem != null)
             {
-                myOrganization[cbDepartments.Text].Remove((Employee)lbEmployees.SelectedItem);
+                myOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
                 UpdateListBoxEmployee(cbDepartments.Text);
             }
             else
@@ -208,9 +207,9 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         private void BtnChangeEmployee_Click(object sender, RoutedEventArgs e)
         {
             wndChangeEmployee wndChangeEmployee = new wndChangeEmployee();            
-            if (lbEmployees.SelectedItem != null)
+            if (lvEmployees.SelectedItem != null)
             {
-                Employee employeeBuffer = (Employee)lbEmployees.SelectedItem;
+                Employee employeeBuffer = (Employee)lvEmployees.SelectedItem;
                 wndChangeEmployee.LastName = employeeBuffer.LastName;
                 wndChangeEmployee.FirstName = employeeBuffer.FirstName;
                 wndChangeEmployee.Profession = employeeBuffer.Profession;
@@ -218,7 +217,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 wndChangeEmployee.Department = cbDepartments.Text;
                 if (wndChangeEmployee.ShowDialog() == true)
                 {
-                    myOrganization[cbDepartments.Text].Remove((Employee)lbEmployees.SelectedItem);
+                    myOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
                     myOrganization[wndChangeEmployee.Department].Add(wndChangeEmployee.ForExchange);
                     cbDepartments.Text = wndChangeEmployee.Department;
                     UpdateListBoxEmployee(wndChangeEmployee.Department);
@@ -256,7 +255,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void LbEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lbEmployees.SelectedItem != null)
+            if (lvEmployees.SelectedItem != null)
             {
                 btnDeleteEmployee.Visibility = Visibility.Visible;
                 btnChangeEmployee.Visibility = Visibility.Visible;
