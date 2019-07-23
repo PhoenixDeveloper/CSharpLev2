@@ -23,25 +23,36 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
     /// </summary>
     public partial class MainWindow : Window
     {
-        static public Organization myOrganization;
+        static public Organization MyOrganization { get; set; }
+
         static string fileName = "data.xml";
+        public string TestStr { get; set; }
 
         public MainWindow()
         {
+            MyOrganization = new Organization()
+            {
+                //{"Информационный", new Department() { Name = "Информационный" } },
+                //{ "Административный", new Department() { Name = "Административный" } },
+                //{ "Экономический", new Department() { Name = "Экономический" } }
+            };
             InitializeComponent();
-            myOrganization = new Organization();
-            //myOrganization.organization = new Dictionary<string, Department>();
-            myOrganization.Add("Информационный", new Department() { Name = "Информационный" });
-            myOrganization.Add("Административный", new Department() { Name = "Административный" });
-            myOrganization.Add("Экономический", new Department() { Name = "Экономический" });
+
+            this.DataContext = this;
+
+            if (cbDepartments.Items.Count == 0)
+            {
+                btnChangeDepartment.Visibility = Visibility.Hidden;
+                btnDeleteDepartment.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                cbDepartments.Text = MyOrganization.Keys.First();
+            }
 
             btnDeleteEmployee.Visibility = Visibility.Hidden;
-            btnDeleteDepartment.Visibility = Visibility.Hidden;
-
             btnChangeEmployee.Visibility = Visibility.Hidden;
-            btnChangeDepartment.Visibility = Visibility.Hidden;
-
-            UpdateCheckBoxDepartments();
+            
             
         }
 
@@ -62,7 +73,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             wndNewEmployee wndNewEmployee = new wndNewEmployee();
             if (wndNewEmployee.ShowDialog() == true)
             {
-                myOrganization[wndNewEmployee.NameOfDepartment].Add(wndNewEmployee.ForExchange);
+                MyOrganization[wndNewEmployee.NameOfDepartment].Add(wndNewEmployee.ForExchange);
                 cbDepartments.Text = wndNewEmployee.NameOfDepartment;
                 UpdateListBoxEmployee(wndNewEmployee.NameOfDepartment);
             };
@@ -70,11 +81,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         void UpdateCheckBoxDepartments()
         {
-            cbDepartments.Items.Clear();
-            foreach (var department in myOrganization)
-            {
-                cbDepartments.Items.Add(department.Key);
-            }
+            cbDepartments.Items.Refresh();
             if (cbDepartments.Items.Count != 0)
             {
                 cbDepartments.SelectedItem = cbDepartments.Items[cbDepartments.Items.Count - 1];
@@ -85,7 +92,6 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             }
             else
             {                
-                lvEmployees.Items.Clear();
                 btnDeleteDepartment.Visibility = Visibility.Hidden;
                 btnChangeDepartment.Visibility = Visibility.Hidden;
                 MessageBox.Show("Список департаментов пуст. Для продолжения работы создайте департаменты.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -94,7 +100,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         void UpdateListBoxEmployee(string NameOfDepartment)
         {
-            lvEmployees.ItemsSource = myOrganization[NameOfDepartment];
+            lvEmployees.ItemsSource = MyOrganization[cbDepartments.Text];
             lvEmployees.Items.Refresh();
             if (cbDepartments.Items.Count != 0)
             {
@@ -115,7 +121,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Organization));
             FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            xmlSerializer.Serialize(fileStream, myOrganization);
+            xmlSerializer.Serialize(fileStream, MyOrganization);
             fileStream.Close();
 
         }
@@ -141,7 +147,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 fileName = ofd.FileName;
                 XmlSerializer xmlFormat = new XmlSerializer(typeof(Organization));
                 Stream fStream = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read);
-                myOrganization = (Organization)xmlFormat.Deserialize(fStream);
+                MyOrganization = (Organization)xmlFormat.Deserialize(fStream);
                 UpdateCheckBoxDepartments();
                 if (cbDepartments.Items.Count != 0)
                 {                    
@@ -161,7 +167,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 fileName = sfd.FileName;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Organization));
                 FileStream fileStream = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write);
-                xmlSerializer.Serialize(fileStream, myOrganization);
+                xmlSerializer.Serialize(fileStream, MyOrganization);
                 fileStream.Close();
             }
         }
@@ -171,7 +177,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             wndNewDepartment wndNewDepartment = new wndNewDepartment();
             if (wndNewDepartment.ShowDialog() == true)
             {
-                myOrganization.Add(wndNewDepartment.NameOfDepartment, new Department() { Name = wndNewDepartment.NameOfDepartment });
+                MyOrganization.Add(wndNewDepartment.NameOfDepartment, new Department() { Name = wndNewDepartment.NameOfDepartment });
                 UpdateCheckBoxDepartments();
                 cbDepartments.Text = wndNewDepartment.NameOfDepartment;
                 UpdateListBoxEmployee(wndNewDepartment.NameOfDepartment);
@@ -182,7 +188,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         {
             if (lvEmployees.SelectedItem != null)
             {
-                myOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
+                MyOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
                 UpdateListBoxEmployee(cbDepartments.Text);
             }
             else
@@ -195,7 +201,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         {
             if (cbDepartments.Items.Count != 0)
             {
-                myOrganization.Remove(cbDepartments.Text);
+                MyOrganization.Remove(cbDepartments.Text);
                 UpdateCheckBoxDepartments();
             }
             else
@@ -217,8 +223,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 wndChangeEmployee.Department = cbDepartments.Text;
                 if (wndChangeEmployee.ShowDialog() == true)
                 {
-                    myOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
-                    myOrganization[wndChangeEmployee.Department].Add(wndChangeEmployee.ForExchange);
+                    MyOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
+                    MyOrganization[wndChangeEmployee.Department].Add(wndChangeEmployee.ForExchange);
                     cbDepartments.Text = wndChangeEmployee.Department;
                     UpdateListBoxEmployee(wndChangeEmployee.Department);
                 };
@@ -234,13 +240,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             wndChangeDepartment wndChangeDepartment = new wndChangeDepartment();
             if (cbDepartments.Items.Count != 0)
             {
-                Department employeesBuffer = myOrganization[cbDepartments.Text];
+                Department employeesBuffer = MyOrganization[cbDepartments.Text];
                 wndChangeDepartment.Department = cbDepartments.Text;
                 if (wndChangeDepartment.ShowDialog() == true)
                 {
-                    myOrganization.Remove(cbDepartments.Text);
+                    MyOrganization.Remove(cbDepartments.Text);
                     employeesBuffer.Name = wndChangeDepartment.Department;
-                    myOrganization.Add(wndChangeDepartment.Department, employeesBuffer);
+                    MyOrganization.Add(wndChangeDepartment.Department, employeesBuffer);
                     UpdateCheckBoxDepartments();
                     cbDepartments.Text = wndChangeDepartment.Department;
                     UpdateListBoxEmployee(wndChangeDepartment.Department);

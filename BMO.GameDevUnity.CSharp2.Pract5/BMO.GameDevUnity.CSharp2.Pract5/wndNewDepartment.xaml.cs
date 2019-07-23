@@ -24,12 +24,22 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         public wndNewDepartment()
         {
             InitializeComponent();
+
+            this.DataContext = this;
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            NameOfDepartment = tbNameDepartment.Text;
-            this.DialogResult = true;
+            if (tbNameDepartment.Text.Length == 0)
+            {
+                MessageBox.Show("Имя департамента не может быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                NameOfDepartment = tbNameDepartment.Text;
+
+                this.DialogResult = true;
+            }
             this.Close();
         }
     }

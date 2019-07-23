@@ -25,7 +25,10 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         public wndNewEmployee()
         {
             InitializeComponent();
-            foreach (var department in MainWindow.myOrganization)
+
+            this.DataContext = this;
+
+            foreach (var department in MainWindow.MyOrganization)
             {
                 cbDepartments.Items.Add(department.Key);
             }
