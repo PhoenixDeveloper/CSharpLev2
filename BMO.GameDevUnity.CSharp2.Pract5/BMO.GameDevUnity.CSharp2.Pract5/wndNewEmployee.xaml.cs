@@ -25,7 +25,10 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         public wndNewEmployee()
         {
             InitializeComponent();
-            foreach (var department in MainWindow.myOrganization)
+
+            this.DataContext = this;
+
+            foreach (var department in MainWindow.MyOrganization)
             {
                 cbDepartments.Items.Add(department.Key);
             }
@@ -38,13 +41,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             {
                 ForExchange = new Employee(tbLastName.Text, tbFirstName.Text, tbProfession.Text, Convert.ToInt32(tbAge.Text));
                 NameOfDepartment = cbDepartments.Text;
+                this.DialogResult = true;
             }
             catch (Exception)
             {
 
                 MessageBox.Show("Введены некорректные данные", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }   
-            this.DialogResult = true;
             this.Close();
         }
     }

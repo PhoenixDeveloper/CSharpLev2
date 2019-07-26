@@ -3,15 +3,76 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows;
 
 namespace BMO.GameDevUnity.CSharp2.Pract5
 {
-    public class Employee
+    public class Employee: INotifyPropertyChanged
     {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string Profession { get; set; }
-        public int Age { get; set; }
+        string lastName;
+        string firstName;
+        string profession;
+        int age;
+
+        public string LastName {
+            get
+            {
+                return lastName;
+            }
+            set
+            {
+                lastName = value;
+                this.NotifyPropertyChanged("LastName");
+            }
+        }
+
+        public string FirstName
+        {
+            get
+            {
+                return firstName;
+            }
+            set
+            {
+                firstName = value;
+                this.NotifyPropertyChanged("FirstName");
+            }
+        }
+
+        public string Profession
+        {
+            get
+            {
+                return profession;
+            }
+            set
+            {
+                profession = value;
+                this.NotifyPropertyChanged("Profession");
+            }
+        }
+
+        public int Age
+        {
+            get
+            {
+                return age;
+            }
+            set
+            {
+                try
+                {
+                    age = value;
+                    this.NotifyPropertyChanged("Age");
+                }
+                catch (Exception)
+                {
+
+                    MessageBox.Show("Введены некорректные данные", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
 
         public Employee(string lastName, string firstName, string profession, int age)
         {
@@ -24,6 +85,13 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         public Employee()
         {
 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         public override string ToString()

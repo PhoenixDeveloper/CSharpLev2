@@ -23,6 +23,8 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         public wndChangeDepartment()
         {
             InitializeComponent();
+
+            this.DataContext = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -32,8 +34,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            Department = tbNameDepartment.Text;
-            this.DialogResult = true;
+            if (tbNameDepartment.Text.Length == 0)
+            {
+                MessageBox.Show("Имя департамента не может быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                Department = tbNameDepartment.Text;
+                this.DialogResult = true;
+            }
+
             this.Close();
         }
 
