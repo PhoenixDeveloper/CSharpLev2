@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data;
 
 namespace BMO.GameDevUnity.CSharp2.Pract5
 {
@@ -19,23 +20,15 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
     /// </summary>
     public partial class wndChangeEmployee : Window
     {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string Profession { get; set; }
-        public int Age { get; set; }
-        public string Department { get; set; }
-        public Employee ForExchange { get; set; }
+        public DataRow resultRow { get; set; }
 
-        public wndChangeEmployee()
+        public wndChangeEmployee(DataRow newRow)
         {
             InitializeComponent();
 
             this.DataContext = this;
 
-            foreach (var department in MainWindow.MyOrganization)
-            {
-                cbDepartments.Items.Add(department.Key);
-            }
+            resultRow = newRow;
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
@@ -48,34 +41,39 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         {
             try
             {
-                ForExchange = new Employee(tbLastName.Text, tbFirstName.Text, tbProfession.Text, Convert.ToInt32(tbAge.Text));
-                Department = cbDepartments.Text;
+                resultRow["first_name"] = tbFirstName.Text;
+                resultRow["last_name"] = tbLastName.Text;
+                resultRow["profession"] = tbProfession.Text;
+                resultRow["age"] = tbAge.Text;
+                DataRowView department = (DataRowView)cbDepartments.SelectedItem;
+                resultRow["id_department"] = department.Row.ItemArray[0];
                 this.DialogResult = true;
             }
             catch (Exception)
             {
 
                 MessageBox.Show("Введены некорректные данные", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-            }            
+            }
             this.Close();
         }
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            tbLastName.Text = LastName;
-            tbFirstName.Text = FirstName;
-            tbProfession.Text = Profession;
-            tbAge.Text = Age.ToString();
-            cbDepartments.Text = Department;
+            tbFirstName.Text = resultRow["first_name"].ToString();
+            tbLastName.Text = resultRow["last_name"].ToString();
+            tbProfession.Text = resultRow["profession"].ToString();
+            tbAge.Text = resultRow["age"].ToString();
+            cbDepartments.Text = MainWindow.dtDepartments.Rows.Find((int)resultRow["id_department"]).ItemArray[1].ToString();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            tbLastName.Text = LastName;
-            tbFirstName.Text = FirstName;
-            tbProfession.Text = Profession;
-            tbAge.Text = Age.ToString();
-            cbDepartments.Text = Department;
+            tbFirstName.Text = resultRow["first_name"].ToString();
+            tbLastName.Text = resultRow["last_name"].ToString();
+            tbProfession.Text = resultRow["profession"].ToString();
+            tbAge.Text = resultRow["age"].ToString();
+            cbDepartments.DataContext = MainWindow.dtDepartments.DefaultView;
+            cbDepartments.Text = MainWindow.dtDepartments.Rows.Find((int)resultRow["id_department"]).ItemArray[1].ToString();
         }
     }
 }

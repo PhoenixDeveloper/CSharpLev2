@@ -16,7 +16,7 @@
         <Label Content="Age"/>
         <TextBox Name="tbAge" Width="300" HorizontalAlignment="Left"/>
         <Label Content="Department"/>
-        <ComboBox x:Name="cbDepartments"></ComboBox>
+        <ComboBox x:Name="cbDepartments" ItemsSource="{Binding}" DisplayMemberPath="name"></ComboBox>
         <Grid>
             <Button Name="btnOK" Content="OK" Margin="5" HorizontalAlignment="Right" Click="BtnOK_Click"/>
             <Button x:Name="btnCancel" Content="Cancel" Margin="5,5,120,5" HorizontalAlignment="Right" Click="BtnCancel_Click"/>

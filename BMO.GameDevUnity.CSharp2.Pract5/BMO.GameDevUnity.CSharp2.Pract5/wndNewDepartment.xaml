@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BMO.GameDevUnity.CSharp2.Pract5"
         mc:Ignorable="d"
-        Title="Добавление нового департамента" Height="120" Width="310">
+        Title="Добавление нового департамента" Height="120" Width="310" Loaded="Window_Loaded">
     <StackPanel Margin="0,0,0,0">
         <Label Content="Name department"/>
         <TextBox Name="tbNameDepartment" Width="300" HorizontalAlignment="Left"/>

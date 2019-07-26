@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data;
 
 namespace BMO.GameDevUnity.CSharp2.Pract5
 {
@@ -19,17 +20,20 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
     /// </summary>
     public partial class wndChangeDepartment : Window
     {
-        public string Department { get; set; }
-        public wndChangeDepartment()
+        public DataRow resultRow { get; set; }
+
+        public wndChangeDepartment(DataRow newRow)
         {
             InitializeComponent();
 
             this.DataContext = this;
+
+            resultRow = newRow;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            tbNameDepartment.Text = Department;
+            tbNameDepartment.Text = resultRow["name"].ToString();
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
@@ -40,7 +44,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             }
             else
             {
-                Department = tbNameDepartment.Text;
+                resultRow["name"] = tbNameDepartment.Text;
                 this.DialogResult = true;
             }
 
@@ -55,7 +59,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            tbNameDepartment.Text = Department;
+            tbNameDepartment.Text = resultRow["name"].ToString();
         }
     }
 }

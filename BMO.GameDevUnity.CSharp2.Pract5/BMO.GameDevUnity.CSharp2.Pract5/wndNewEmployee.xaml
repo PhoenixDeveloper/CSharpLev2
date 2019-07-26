@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BMO.GameDevUnity.CSharp2.Pract5"
         mc:Ignorable="d"
-        Title="Добавление нового сотрудника" Height="300" Width="350">
+        Title="Добавление нового сотрудника" Height="300" Width="350" Loaded="Window_Loaded">
     <StackPanel Margin="0,0,0,0">
         <Label Content="First Name"/>
         <TextBox Name="tbFirstName" Width="300" HorizontalAlignment="Left"/>
@@ -16,7 +16,7 @@
         <Label Content="Age"/>
         <TextBox Name="tbAge" Width="300" HorizontalAlignment="Left"/>
         <Label Content="Department"/>
-        <ComboBox x:Name="cbDepartments"></ComboBox>
+        <ComboBox x:Name="cbDepartments" ItemsSource="{Binding}" DisplayMemberPath="name"></ComboBox>
         <Button Name="btnOK" Content="OK" Margin="5" HorizontalAlignment="Right" Click="BtnOK_Click"/>
     </StackPanel>
 </Window>

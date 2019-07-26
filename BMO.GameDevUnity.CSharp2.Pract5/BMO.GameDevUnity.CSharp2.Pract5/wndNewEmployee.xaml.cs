@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace BMO.GameDevUnity.CSharp2.Pract5
 {
@@ -19,28 +21,27 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
     /// </summary>
     public partial class wndNewEmployee : Window
     {
-        public Employee ForExchange { get; set; }
-        public string NameOfDepartment { get; set; }
+        public DataRow resultRow { get; set; }
 
-        public wndNewEmployee()
+        public wndNewEmployee(DataRow newRow)
         {
             InitializeComponent();
 
             this.DataContext = this;
 
-            foreach (var department in MainWindow.MyOrganization)
-            {
-                cbDepartments.Items.Add(department.Key);
-            }
-            cbDepartments.Text = cbDepartments.Items[0].ToString();
+            resultRow = newRow;
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                ForExchange = new Employee(tbLastName.Text, tbFirstName.Text, tbProfession.Text, Convert.ToInt32(tbAge.Text));
-                NameOfDepartment = cbDepartments.Text;
+                resultRow["first_name"] = tbFirstName.Text;
+                resultRow["last_name"] = tbLastName.Text;
+                resultRow["profession"] = tbProfession.Text;
+                resultRow["age"] = tbAge.Text;
+                DataRowView department = (DataRowView)cbDepartments.SelectedItem;
+                resultRow["id_department"] = department.Row.ItemArray[0];
                 this.DialogResult = true;
             }
             catch (Exception)
@@ -49,6 +50,16 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 MessageBox.Show("Введены некорректные данные", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }   
             this.Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            tbFirstName.Text = resultRow["first_name"].ToString();
+            tbLastName.Text = resultRow["last_name"].ToString();
+            tbProfession.Text = resultRow["profession"].ToString();
+            tbAge.Text = resultRow["age"].ToString();
+            cbDepartments.DataContext = MainWindow.dtDepartments.DefaultView;
+            cbDepartments.Text = MainWindow.dtDepartments.Rows[0].ItemArray[1].ToString();
         }
     }
 }

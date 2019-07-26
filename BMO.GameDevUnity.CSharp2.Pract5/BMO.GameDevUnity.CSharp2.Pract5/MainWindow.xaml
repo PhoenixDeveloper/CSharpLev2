@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BMO.GameDevUnity.CSharp2.Pract5"
         mc:Ignorable="d"
-        Title="Сотрудники организации" Height="450" Width="800">
+        Title="Сотрудники организации" Height="450" Width="800" Loaded="WndMain_Loaded">
     <Window.Resources>
         <SolidColorBrush x:Key="Brush1" Color="Azure"/>
     </Window.Resources>
@@ -33,17 +33,17 @@
                 <MenuItem x:Name="miExit" Header="Exit" Click="MiExit_Click"></MenuItem>
             </MenuItem>
         </Menu>
-        <ListView x:Name="lvEmployees" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20" SelectionChanged="LbEmployees_SelectionChanged">
+        <ListView x:Name="lvEmployees" ItemsSource="{Binding}" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" Margin="20" SelectionChanged="LbEmployees_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Имя" Width="125px" DisplayMemberBinding="{Binding FirstName}" />
-                    <GridViewColumn Header="Фамилия" Width="125px" DisplayMemberBinding="{Binding LastName}" />
-                    <GridViewColumn Header="Возраст" Width="100px" DisplayMemberBinding="{Binding Age}" />
-                    <GridViewColumn Header="Профессия" Width="160px" DisplayMemberBinding="{Binding Profession}" />
+                    <GridViewColumn Header="Имя" Width="125px" DisplayMemberBinding="{Binding first_name}" />
+                    <GridViewColumn Header="Фамилия" Width="125px" DisplayMemberBinding="{Binding last_name}" />
+                    <GridViewColumn Header="Возраст" Width="100px" DisplayMemberBinding="{Binding age}" />
+                    <GridViewColumn Header="Профессия" Width="160px" DisplayMemberBinding="{Binding profession}" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <ComboBox x:Name="cbDepartments" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" ItemsSource="{Binding ElementName=wndMain, Path=MyOrganization.Keys, Mode=OneWay}" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed"/>
+        <ComboBox x:Name="cbDepartments" ItemsSource="{Binding}" DisplayMemberPath="name" Grid.Column="2" VerticalAlignment="Top" FontSize="20" Margin="30" HorizontalContentAlignment="Right" DropDownClosed="CbDepartments_DropDownClosed"/>
         <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,20" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddEmployee" Click="BtnAddEmployee_Click"/>
         <Button Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,20,20,70" Content="Add" Background="{DynamicResource Brush1}" Foreground="Brown" Name="btnAddDepartment" Click="BtnAddDepartment_Click"/>
         

@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Win32;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace BMO.GameDevUnity.CSharp2.Pract5
 {
@@ -23,32 +25,21 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
     /// </summary>
     public partial class MainWindow : Window
     {
-        static public Organization MyOrganization { get; set; }
+        //static public Organization MyOrganization { get; set; }
 
         static string fileName = "data.xml";
-        public string TestStr { get; set; }
+
+        SqlConnection connection;
+        SqlDataAdapter adapterEmployees;
+        public static DataTable dtEmployees;
+        SqlDataAdapter adapterDepartments;
+        public static DataTable dtDepartments;
 
         public MainWindow()
         {
-            MyOrganization = new Organization()
-            {
-                //{"Информационный", new Department() { Name = "Информационный" } },
-                //{ "Административный", new Department() { Name = "Административный" } },
-                //{ "Экономический", new Department() { Name = "Экономический" } }
-            };
             InitializeComponent();
 
-            this.DataContext = this;
-
-            if (cbDepartments.Items.Count == 0)
-            {
-                btnChangeDepartment.Visibility = Visibility.Hidden;
-                btnDeleteDepartment.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                cbDepartments.Text = MyOrganization.Keys.First();
-            }
+            this.DataContext = this;          
 
             btnDeleteEmployee.Visibility = Visibility.Hidden;
             btnChangeEmployee.Visibility = Visibility.Hidden;
@@ -56,37 +47,109 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             
         }
 
-        private void BtnButton1_Click(object sender, RoutedEventArgs e)
+        private void WndMain_Loaded(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("Press");
+            //string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=MyDatabaseCSharpLev2Pract7;Integrated Security=True;Pooling=False";
+            // Из-за особенностей игнорирования Git, необходимо перенести базу данных из корня проекта в попку выполнения bin/Debug
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\MyDatabaseCSharpLev2Pract7.mdf;Integrated Security=True;Pooling=False";
+            connection = new SqlConnection(connectionString);
+            adapterEmployees = new SqlDataAdapter();
+            adapterDepartments = new SqlDataAdapter();
+
+            // SELECT Departments
+            SqlCommand command = new SqlCommand("SELECT Id, name FROM Departments", connection);
+            adapterDepartments.SelectCommand = command;
+
+            // INSERT Department
+            command = new SqlCommand(@"INSERT INTO Departments(name) VALUES (@name); SET @Id = @@IDENTITY;", connection);
+            command.Parameters.Add("@name", SqlDbType.NVarChar, 50, "name");
+            SqlParameter param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+            param.Direction = ParameterDirection.Output;
+            adapterDepartments.InsertCommand = command;
+
+            // UPDATE Department
+            command = new SqlCommand("UPDATE Departments SET name = @name WHERE Id = @Id", connection);
+            command.Parameters.Add("@name", SqlDbType.NVarChar, 50, "name");
+            param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+            param.SourceVersion = DataRowVersion.Original;
+            adapterDepartments.UpdateCommand = command;
+
+            // DELETE Department
+            command = new SqlCommand("DELETE FROM Departments WHERE Id = @Id", connection);
+            param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+            param.SourceVersion = DataRowVersion.Original;
+            adapterDepartments.DeleteCommand = command;
+
+            // Заполнение департаментов
+            dtDepartments = new DataTable();
+            adapterDepartments.Fill(dtDepartments);
+            dtDepartments.PrimaryKey = new DataColumn[1] { dtDepartments.Columns[0] };
+            dtDepartments.Columns[0].AutoIncrement = true;
+            dtDepartments.Columns[0].AutoIncrementStep = 1;
+            cbDepartments.DataContext = dtDepartments.DefaultView;
+            cbDepartments.Text = dtDepartments.Rows[0].ItemArray[1].ToString();
+            if (cbDepartments.Items.Count == 0)
+            {
+                btnChangeDepartment.Visibility = Visibility.Hidden;
+                btnDeleteDepartment.Visibility = Visibility.Hidden;
+            }
+
+
+            // SELECT Employees
+            command = new SqlCommand($"SELECT Id, last_name, first_name, profession, age, id_department FROM Employees WHERE id_department = {dtDepartments.Rows[0].ItemArray[0]}", connection);
+            adapterEmployees.SelectCommand = command;
+
+            // INSERT Employee
+            command = new SqlCommand(@"INSERT INTO Employees(last_name, first_name, profession, age, id_department) VALUES (@last_name, @first_name, @profession, @age, @id_department); SET @Id = @@IDENTITY;", connection);
+            command.Parameters.Add("@last_name", SqlDbType.NVarChar, 50, "last_name");
+            command.Parameters.Add("@first_name", SqlDbType.NVarChar, 50, "first_name");
+            command.Parameters.Add("@profession", SqlDbType.NVarChar, 50, "profession");
+            command.Parameters.Add("@age", SqlDbType.Int, 0, "age");
+            command.Parameters.Add("@id_department", SqlDbType.Int, 0, "id_department");
+            param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+            param.Direction = ParameterDirection.Output;
+            adapterEmployees.InsertCommand = command;
+
+            // UPDATE Employee
+            command = new SqlCommand("UPDATE Employees SET last_name = @last_name, first_name = @first_name, profession = @profession, age = @age, id_department = @id_department WHERE Id = @Id", connection);
+            command.Parameters.Add("@last_name", SqlDbType.NVarChar, 50, "last_name");
+            command.Parameters.Add("@first_name", SqlDbType.NVarChar, 50, "first_name");
+            command.Parameters.Add("@profession", SqlDbType.NVarChar, 50, "profession");
+            command.Parameters.Add("@age", SqlDbType.Int, 0, "age");
+            command.Parameters.Add("@id_department", SqlDbType.Int, 0, "id_department");
+            param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+            param.SourceVersion = DataRowVersion.Original;
+            adapterEmployees.UpdateCommand = command;
+
+            // DELETE Emmployee
+            command = new SqlCommand("DELETE FROM Employees WHERE Id = @Id", connection);
+            param = command.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+            param.SourceVersion = DataRowVersion.Original;
+            adapterEmployees.DeleteCommand = command;
+
+            // Заполнение сотрудников
+            dtEmployees = new DataTable();
+            adapterEmployees.Fill(dtEmployees);
+            dtEmployees.PrimaryKey = new DataColumn[1] { dtEmployees.Columns[0] };
+            lvEmployees.DataContext = dtEmployees.DefaultView;
         }
-
-
 
         private void MiExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void BtnAddEmployee_Click(object sender, RoutedEventArgs e)
-        {
-            wndNewEmployee wndNewEmployee = new wndNewEmployee();
-            if (wndNewEmployee.ShowDialog() == true)
-            {
-                MyOrganization[wndNewEmployee.NameOfDepartment].Add(wndNewEmployee.ForExchange);
-                cbDepartments.Text = wndNewEmployee.NameOfDepartment;
-                UpdateListBoxEmployee(wndNewEmployee.NameOfDepartment);
-            };
-        }
-
         void UpdateCheckBoxDepartments()
         {
-            cbDepartments.Items.Refresh();
             if (cbDepartments.Items.Count != 0)
             {
-                cbDepartments.SelectedItem = cbDepartments.Items[cbDepartments.Items.Count - 1];
-                cbDepartments.Text = (cbDepartments.Items.Count == 1)?(cbDepartments.Text = cbDepartments.Items[cbDepartments.Items.IndexOf(cbDepartments.SelectedItem)].ToString()):(cbDepartments.Items[0].ToString());
-                UpdateListBoxEmployee(cbDepartments.Text);
+                if (cbDepartments.SelectedItem == null)
+                {
+                    cbDepartments.SelectedItem = cbDepartments.Items[cbDepartments.Items.Count - 1];
+                }
+                DataRowView department = (DataRowView)cbDepartments.SelectedItem;
+                cbDepartments.Text = department.Row.ItemArray[1].ToString();
+                UpdateListBoxEmployee();
                 btnDeleteDepartment.Visibility = Visibility.Visible;
                 btnChangeDepartment.Visibility = Visibility.Visible;
             }
@@ -98,10 +161,14 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
             }
         }
 
-        void UpdateListBoxEmployee(string NameOfDepartment)
+        void UpdateListBoxEmployee()
         {
-            lvEmployees.ItemsSource = MyOrganization[cbDepartments.Text];
-            lvEmployees.Items.Refresh();
+            DataRowView department = (DataRowView)cbDepartments.SelectedItem; 
+            SqlCommand command = new SqlCommand($"SELECT Id, last_name, first_name, profession, age, id_department FROM Employees WHERE id_department = {department.Row.ItemArray[0]}", connection);
+            adapterEmployees.SelectCommand = command;
+            dtEmployees.Clear();
+            adapterEmployees.Fill(dtEmployees);
+
             if (cbDepartments.Items.Count != 0)
             {
                 btnDeleteDepartment.Visibility = Visibility.Visible;
@@ -121,7 +188,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Organization));
             FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            xmlSerializer.Serialize(fileStream, MyOrganization);
+            //xmlSerializer.Serialize(fileStream, MyOrganization);
             fileStream.Close();
 
         }
@@ -130,7 +197,7 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
         {
             if (cbDepartments.Items.Count != 0)
             {
-                UpdateListBoxEmployee(cbDepartments.Text);
+                UpdateListBoxEmployee();
             }
             else
             {
@@ -147,11 +214,11 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 fileName = ofd.FileName;
                 XmlSerializer xmlFormat = new XmlSerializer(typeof(Organization));
                 Stream fStream = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read);
-                MyOrganization = (Organization)xmlFormat.Deserialize(fStream);
+                //MyOrganization = (Organization)xmlFormat.Deserialize(fStream);
                 UpdateCheckBoxDepartments();
                 if (cbDepartments.Items.Count != 0)
                 {                    
-                    UpdateListBoxEmployee(cbDepartments.Text);
+                    UpdateListBoxEmployee();
                 }                
                 fStream.Close();
             }
@@ -167,29 +234,47 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
                 fileName = sfd.FileName;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Organization));
                 FileStream fileStream = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write);
-                xmlSerializer.Serialize(fileStream, MyOrganization);
+                //xmlSerializer.Serialize(fileStream, MyOrganization);
                 fileStream.Close();
             }
         }
 
+        private void BtnAddEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            DataRow newRow = dtEmployees.NewRow();
+            wndNewEmployee wndNewEmployee = new wndNewEmployee(newRow);
+            if (wndNewEmployee.ShowDialog() == true)
+            {
+                dtEmployees.Rows.Add(wndNewEmployee.resultRow);
+                adapterEmployees.Update(dtEmployees);
+                cbDepartments.Text = dtDepartments.Rows.Find((int)wndNewEmployee.resultRow["id_department"]).ItemArray[1].ToString();
+                UpdateListBoxEmployee();
+            };
+        }
+
         private void BtnAddDepartment_Click(object sender, RoutedEventArgs e)
         {
-            wndNewDepartment wndNewDepartment = new wndNewDepartment();
+            DataRow newRow = dtDepartments.NewRow();
+            wndNewDepartment wndNewDepartment = new wndNewDepartment(newRow);
             if (wndNewDepartment.ShowDialog() == true)
             {
-                MyOrganization.Add(wndNewDepartment.NameOfDepartment, new Department() { Name = wndNewDepartment.NameOfDepartment });
+                dtDepartments.Rows.Add(wndNewDepartment.resultRow);
+                adapterDepartments.Update(dtDepartments);
+                cbDepartments.SelectedItem = dtDepartments.Rows.Find((int)wndNewDepartment.resultRow["Id"]);
                 UpdateCheckBoxDepartments();
-                cbDepartments.Text = wndNewDepartment.NameOfDepartment;
-                UpdateListBoxEmployee(wndNewDepartment.NameOfDepartment);
+                cbDepartments.Text = dtDepartments.Rows.Find((int)wndNewDepartment.resultRow["Id"]).ItemArray[1].ToString();
+                UpdateListBoxEmployee();
             };
         }
 
         private void BtnDeleteEmployee_Click(object sender, RoutedEventArgs e)
         {
+            DataRowView newRow = (DataRowView)lvEmployees.SelectedItem;
             if (lvEmployees.SelectedItem != null)
             {
-                MyOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
-                UpdateListBoxEmployee(cbDepartments.Text);
+                newRow.Row.Delete();
+                adapterEmployees.Update(dtEmployees);
+                UpdateListBoxEmployee();
             }
             else
             {
@@ -199,9 +284,11 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnDeleteDepartment_Click(object sender, RoutedEventArgs e)
         {
+            DataRowView newRow = (DataRowView)cbDepartments.SelectedItem;
             if (cbDepartments.Items.Count != 0)
             {
-                MyOrganization.Remove(cbDepartments.Text);
+                newRow.Row.Delete();
+                adapterDepartments.Update(dtDepartments);
                 UpdateCheckBoxDepartments();
             }
             else
@@ -212,22 +299,22 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnChangeEmployee_Click(object sender, RoutedEventArgs e)
         {
-            wndChangeEmployee wndChangeEmployee = new wndChangeEmployee();            
+            DataRowView newRow = (DataRowView)lvEmployees.SelectedItem;
+            newRow.BeginEdit();
+            wndChangeEmployee wndChangeEmployee = new wndChangeEmployee(newRow.Row);            
             if (lvEmployees.SelectedItem != null)
             {
-                Employee employeeBuffer = (Employee)lvEmployees.SelectedItem;
-                wndChangeEmployee.LastName = employeeBuffer.LastName;
-                wndChangeEmployee.FirstName = employeeBuffer.FirstName;
-                wndChangeEmployee.Profession = employeeBuffer.Profession;
-                wndChangeEmployee.Age = employeeBuffer.Age;
-                wndChangeEmployee.Department = cbDepartments.Text;
                 if (wndChangeEmployee.ShowDialog() == true)
                 {
-                    MyOrganization[cbDepartments.Text].Remove((Employee)lvEmployees.SelectedItem);
-                    MyOrganization[wndChangeEmployee.Department].Add(wndChangeEmployee.ForExchange);
-                    cbDepartments.Text = wndChangeEmployee.Department;
-                    UpdateListBoxEmployee(wndChangeEmployee.Department);
-                };
+                    newRow.EndEdit();
+                    adapterEmployees.Update(dtEmployees);
+                    cbDepartments.Text = dtDepartments.Rows.Find((int)wndChangeEmployee.resultRow["id_department"]).ItemArray[1].ToString();
+                    UpdateListBoxEmployee();
+                }
+                else
+                {
+                    newRow.CancelEdit();
+                }
             }
             else
             {
@@ -237,20 +324,24 @@ namespace BMO.GameDevUnity.CSharp2.Pract5
 
         private void BtnChangeDepartment_Click(object sender, RoutedEventArgs e)
         {
-            wndChangeDepartment wndChangeDepartment = new wndChangeDepartment();
+            DataRowView newRow = (DataRowView)cbDepartments.SelectedItem;
+            newRow.BeginEdit();
+            wndChangeDepartment wndChangeDepartment = new wndChangeDepartment(newRow.Row);
             if (cbDepartments.Items.Count != 0)
-            {
-                Department employeesBuffer = MyOrganization[cbDepartments.Text];
-                wndChangeDepartment.Department = cbDepartments.Text;
+            {                
                 if (wndChangeDepartment.ShowDialog() == true)
                 {
-                    MyOrganization.Remove(cbDepartments.Text);
-                    employeesBuffer.Name = wndChangeDepartment.Department;
-                    MyOrganization.Add(wndChangeDepartment.Department, employeesBuffer);
+                    newRow.EndEdit();
+                    adapterDepartments.Update(dtDepartments);
+                    cbDepartments.SelectedItem = dtDepartments.Rows.Find((int)wndChangeDepartment.resultRow["Id"]);
+                    cbDepartments.Text = dtDepartments.Rows.Find((int)wndChangeDepartment.resultRow["Id"]).ItemArray[1].ToString();
                     UpdateCheckBoxDepartments();
-                    cbDepartments.Text = wndChangeDepartment.Department;
-                    UpdateListBoxEmployee(wndChangeDepartment.Department);
-                };                
+                    UpdateListBoxEmployee();
+                }
+                else
+                {
+                    newRow.CancelEdit();
+                }
             }
             else
             {
